@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de"l>
+<head>
+<meta charset="utf-8">
+<title>Listenbehandlung</title><link rel="stylesheet" type="text/css" href="slides/slides.css"></head>
+<body>
+<h1>Listenbehandlung</h1>
+<div class="slides">
+<div><div>
+<h1>Listenbehandlung</h1>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@globdef(<span class="name">file: lst.c)</span></span><br/>
+<span class="in1"></span>
+#define lst_IMPL 1<br/>
+<span class="in1"></span>
+#include "lst.h"<br/>
+
+<span class="end">@end(<span class="name">file: lst.c)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@globdef(<span class="name">file: lst.h)</span></span><br/>
+<span class="in1"></span>
+#pragma once<br/>
+
+<br/>
+<span class="in1"></span>
+<span class="expand">@expand(<span class="name">includes)</span></span><br/>
+<span class="in1"></span>
+<span class="expand">@expand(<span class="name">structs)</span></span><br/>
+
+<span class="end">@end(<span class="name">file: lst.h)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@def(<span class="name">structs)</span></span><br/>
+<span class="in1"></span>
+struct lst_Node {<br/>
+<span class="in2"></span>
+struct lst_Node *<span class="type">@priv(<span>link)</span></span>;<br/>
+<span class="in2"></span>
+#if CONFIG_WITH_MAGIC<br/>
+<span class="in3"></span>
+unsigned <span class="type">@priv(<span>magic)</span></span>;<br/>
+<span class="in2"></span>
+#endif<br/>
+<span class="in1"></span>
+};<br/>
+
+<br/>
+<span class="in1"></span>
+<span class="expand">@expand(<span class="name">node functions)</span></span><br/>
+
+<span class="end">@end(<span class="name">structs)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@def(<span class="name">node functions)</span></span><br/>
+<span class="in1"></span>
+#if CONFIG_WITH_MAGIC<br/>
+<span class="in2"></span>
+#define lst_NODE(LINK) { \<br/>
+<span class="in3"></span>
+.<span class="type">@priv(<span>link)</span></span> = (LINK), \<br/>
+<span class="in3"></span>
+.<span class="type">@priv(<span>magic)</span></span> = <span class="num">@magic(<span>lst node)</span></span> \<br/>
+<span class="in2"></span>
+}<br/>
+<span class="in1"></span>
+#else<br/>
+<span class="in2"></span>
+#define lst_NODE(LINK) { \<br/>
+<span class="in3"></span>
+.<span class="type">@priv(<span>link)</span></span> = (LINK} \<br/>
+<span class="in2"></span>
+}<br/>
+<span class="in1"></span>
+#endif<br/>
+
+<span class="end">@end(<span class="name">node functions)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@def(<span class="name">includes)</span></span><br/>
+<span class="in1"></span>
+#include &lt;stdlib.h&gt;<br/>
+
+<span class="end">@end(<span class="name">includes)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">node functions)</span></span><br/>
+<span class="in1"></span>
+#define lst_EMPTY_NODE lst_NODE(NULL)<br/>
+
+<span class="end">@end(<span class="name">node functions)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">includes)</span></span><br/>
+<span class="in1"></span>
+#include &lt;stdbool.h&gt;<br/>
+
+<span class="end">@end(<span class="name">includes)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">node functions)</span></span><br/>
+<span class="in1"></span>
+static inline bool lst_isNode(<br/>
+<span class="in2"></span>
+const struct lst_Node *node<br/>
+<span class="in1"></span>
+) {<br/>
+<span class="in2"></span>
+if (! node) { return false; }<br/>
+<span class="in2"></span>
+#if CONFIG_WITH_MAGIC<br/>
+<span class="in3"></span>
+if (node-&gt;<span class="type">@priv(<span>magic)</span></span> != <span class="num">@magic(<span>lst node)</span></span>) {<br/>
+<span class="in4"></span>
+return false;<br/>
+<span class="in3"></span>
+}<br/>
+<span class="in2"></span>
+#endif<br/>
+<span class="in2"></span>
+return true;<br/>
+<span class="in1"></span>
+}<br/>
+
+<span class="end">@end(<span class="name">node functions)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">includes)</span></span><br/>
+<span class="in1"></span>
+#include &lt;assert.h&gt;<br/>
+
+<span class="end">@end(<span class="name">includes)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">node functions)</span></span><br/>
+<span class="in1"></span>
+static inline struct lst_Node *lst_initNode(<br/>
+<span class="in2"></span>
+struct lst_Node *node,<br/>
+<span class="in2"></span>
+struct lst_Node *link<br/>
+<span class="in1"></span>
+) {<br/>
+<span class="in2"></span>
+assert(node);<br/>
+<span class="in2"></span>
+if (link) { assert(lst_isNode(link)); }<br/>
+<span class="in2"></span>
+node-&gt;<span class="type">@priv(<span>link)</span></span> = link;<br/>
+<span class="in2"></span>
+return node;<br/>
+<span class="in1"></span>
+}<br/>
+
+<span class="end">@end(<span class="name">node functions)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">node functions)</span></span><br/>
+<span class="in1"></span>
+static inline struct lst_Node *lst_initEmptyNode(<br/>
+<span class="in2"></span>
+struct lst_Node *node<br/>
+<span class="in1"></span>
+) {<br/>
+<span class="in2"></span>
+return lst_initNode(node, NULL);<br/>
+<span class="in1"></span>
+}<br/>
+
+<span class="end">@end(<span class="name">node functions)</span></span><br/>
+</code>
+</div>
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">node functions)</span></span><br/>
+
+<span class="end">@end(<span class="name">node functions)</span></span><br/>
+</code>
+</div>
