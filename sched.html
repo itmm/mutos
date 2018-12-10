@@ -46,21 +46,12 @@
 
 
 </div>
-</div>
-<h1>Action</h1>
-<div class="slides">
-<div><div>
-<h1>Action</h1>
-</div>
-
-
-</div>
 <div><div>
 <code>
 
 <span class="add">@def(<span class="name">includes</span>)</span><br/>
 
-<span class="in1"></span>#<span class="var">include</span> <span class="str">"lst.h"</span><br/>
+<span class="in1"></span>#<span class="var">include</span> <span class="str">"act.h"</span><br/>
 
 <span class="end">@end(<span class="name">includes</span>)</span><br/>
 
@@ -73,48 +64,6 @@
 <code>
 
 <span class="add">@def(<span class="name">structs</span>)</span><br/>
-
-<span class="in1"></span><span class="type">struct</span> <span class="type">Schedule</span>;<br/>
-
-<br/>
-
-<span class="in1"></span><span class="var">typedef</span> <span class="type">void</span> (* <span class="var">act_Callback</span>)(<br/>
-
-<span class="in2"></span><span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">schedule</span>,<br/>
-
-<span class="in2"></span><span class="type">void</span> *<span class="var">context</span><br/>
-
-<span class="in1"></span>);<br/>
-
-<br/>
-
-<span class="in1"></span><span class="type">struct</span> <span class="type">Action</span> {<br/>
-
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> <span class="type">@priv(<span>node</span>)</span>;<br/>
-
-<span class="in2"></span><span class="var">act_Callback</span> <span class="type">@priv(<span>callback</span>)</span>;<br/>
-
-<span class="in2"></span><span class="type">void</span> *<span class="type">@priv(<span>context</span>)</span>;<br/>
-
-<span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-
-<span class="in3"></span><span class="type">unsigned</span> <span class="type">@priv(<span>magic</span>)</span>;<br/>
-
-<span class="in2"></span>#<span class="var">endif</span><br/>
-
-<span class="in1"></span>};<br/>
-
-<span class="end">@end(<span class="name">structs</span>)</span><br/>
-
-</code>
-</div>
-
-
-</div>
-<div><div>
-<code>
-
-<span class="add">@add(<span class="name">structs</span>)</span><br/>
 
 <span class="in1"></span><span class="type">struct</span> <span class="type">Schedule</span> {<br/>
 
@@ -130,7 +79,7 @@
 
 <br/>
 
-<span class="in1"></span><span class="expand">@expand(<span class="name">schedule functions</span>)</span><br/>
+<span class="in1"></span><span class="expand">@expand(<span class="name">functions</span>)</span><br/>
 
 <span class="end">@end(<span class="name">structs</span>)</span><br/>
 
@@ -142,7 +91,7 @@
 <div><div>
 <code>
 
-<span class="add">@def(<span class="name">schedule functions</span>)</span><br/>
+<span class="add">@def(<span class="name">functions</span>)</span><br/>
 
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
@@ -164,7 +113,7 @@
 
 <span class="in1"></span>#<span class="var">endif</span><br/>
 
-<span class="end">@end(<span class="name">schedule functions</span>)</span><br/>
+<span class="end">@end(<span class="name">functions</span>)</span><br/>
 
 </code>
 </div>
@@ -174,13 +123,13 @@
 <div><div>
 <code>
 
-<span class="add">@add(<span class="name">schedule functions</span>)</span><br/>
+<span class="add">@add(<span class="name">functions</span>)</span><br/>
 
 <span class="in1"></span>#<span class="var">define</span> <span class="var">sched_EMPTY_SCHEDULE</span> \<br/>
 
 <span class="in2"></span><span class="fn">sched_SCHEDULE</span>(<span class="var">lst_EMPTY_LIST</span>)<br/>
 
-<span class="end">@end(<span class="name">schedule functions</span>)</span><br/>
+<span class="end">@end(<span class="name">functions</span>)</span><br/>
 
 </code>
 </div>
@@ -190,7 +139,7 @@
 <div><div>
 <code>
 
-<span class="add">@add(<span class="name">schedule functions</span>)</span><br/>
+<span class="add">@add(<span class="name">functions</span>)</span><br/>
 
 <span class="in1"></span><span class="type">bool</span> <span class="fn">sched_runNextAction</span>(<br/>
 
@@ -208,21 +157,21 @@
 
 <span class="in4"></span><span class="fn">lst_pullFirst</span>(&amp;<span class="var">s</span>-&gt;<span class="type">@priv(<span>list</span>)</span>);<br/>
 
-<span class="in3"></span><span class="keyword">if</span> (! <span class="var">a</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
+<span class="in3"></span><span class="type">bool</span> <span class="var">done</span> = <span class="num">false</span>;<br/>
 
-<span class="in3"></span><span class="var">act_Callback</span> <span class="var">cb</span> = <span class="var">a</span>-&gt;<span class="type">@priv(<span>callback</span>)</span>;<br/>
+<span class="in3"></span><span class="keyword">if</span> (<span class="fn">isAction</span>(<span class="var">a</span>)) {<br/>
 
-<span class="in3"></span><span class="keyword">if</span> (<span class="var">cb</span>) {<br/>
+<span class="in4"></span><span class="keyword">if</span> (<span class="fn">invokeAction</span>(<span class="var">s</span>, <span class="var">a</span>)) { <br/>
 
-<span class="in4"></span><span class="fn">cb</span>(<span class="var">s</span>, <span class="var">a</span>-&gt;<span class="type">@priv(<span>context</span>)</span>);<br/>
+<span class="in5"></span><span class="var">done</span> = <span class="num">true</span>;<br/>
 
-<span class="in4"></span><span class="keyword">return</span> <span class="num">true</span>;<br/>
+<span class="in4"></span>}<br/>
 
 <span class="in3"></span>}<br/>
 
-<span class="in3"></span><span class="fn">free</span>(<span class="var">a</span>);<br/>
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">a</span>) { <span class="fn">free</span>(<span class="var">a</span>); }<br/>
 
-<span class="in3"></span><span class="keyword">return</span> <span class="var">cb</span>;<br/>
+<span class="in3"></span><span class="keyword">return</span> <span class="var">done</span>;<br/>
 
 <span class="in2"></span>}<br/>
 
@@ -232,7 +181,7 @@
 
 <span class="in1"></span>#<span class="var">endif</span><br/>
 
-<span class="end">@end(<span class="name">schedule functions</span>)</span><br/>
+<span class="end">@end(<span class="name">functions</span>)</span><br/>
 
 </code>
 </div>
@@ -242,7 +191,7 @@
 <div><div>
 <code>
 
-<span class="add">@add(<span class="name">schedule functions</span>)</span><br/>
+<span class="add">@add(<span class="name">functions</span>)</span><br/>
 
 <span class="in1"></span><span class="type">bool</span> <span class="fn">sched_push</span>(<br/>
 
@@ -268,11 +217,9 @@
 
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">a</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 
-<span class="in3"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>callback</span>)</span> = <span class="var">cb</span>;<br/>
+<span class="in3"></span><span class="fn">initAction</span>(<span class="var">a</span>, <span class="var">cb</span>, <span class="var">ctx</span>);<br/>
 
-<span class="in3"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>context</span>)</span> = <span class="var">ctx</span>;<br/>
-
-<span class="in3"></span><span class="fn">lst_pushLast</span>(&amp;<span class="var">s</span>-&gt;<span class="type">@priv(<span>list</span>)</span>, &amp;<span class="var">a</span>-&gt;<span class="type">@priv(<span>node</span>)</span>);<br/>
+<span class="in3"></span><span class="fn">lst_pushLast</span>(&amp;<span class="var">s</span>-&gt;<span class="type">@priv(<span>list</span>)</span>, (<span class="type">void</span> *) <span class="var">a</span>);<br/>
 
 <span class="in3"></span><span class="keyword">return</span> <span class="num">true</span>;<br/>
 
@@ -284,7 +231,7 @@
 
 <span class="in1"></span>#<span class="var">endif</span><br/>
 
-<span class="end">@end(<span class="name">schedule functions</span>)</span><br/>
+<span class="end">@end(<span class="name">functions</span>)</span><br/>
 
 </code>
 </div>

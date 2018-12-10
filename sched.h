@@ -1,25 +1,9 @@
 
 	#pragma once
 	
-	#include "lst.h"
+	#include "act.h"
 
 	
-	struct Schedule;
-
-	typedef void (* act_Callback)(
-		struct Schedule *schedule,
-		void *context
-	);
-
-	struct Action {
-		struct lst_Node _private_297147900_node;
-		act_Callback _private_114034139_callback;
-		void *_private_1629340707_context;
-		#if CONFIG_WITH_MAGIC
-			unsigned _private_230416164_magic;
-		#endif
-	};
-
 	struct Schedule {
 		struct lst_List _private_297228220_list;
 		#if CONFIG_WITH_MAGIC
@@ -50,14 +34,14 @@
 			if (! s) { return false; }
 			struct Action *a = (void *)
 				lst_pullFirst(&s->_private_297228220_list);
-			if (! a) { return false; }
-			act_Callback cb = a->_private_114034139_callback;
-			if (cb) {
-				cb(s, a->_private_1629340707_context);
-				return true;
+			bool done = false;
+			if (isAction(a)) {
+				if (invokeAction(s, a)) { 
+					done = true;
+				}
 			}
-			free(a);
-			return cb;
+			if (a) { free(a); }
+			return done;
 		}
 	#else
 		;
@@ -75,9 +59,8 @@
 				sizeof(struct Action)
 			);
 			if (! a) { return false; }
-			a->_private_114034139_callback = cb;
-			a->_private_1629340707_context = ctx;
-			lst_pushLast(&s->_private_297228220_list, &a->_private_297147900_node);
+			initAction(a, cb, ctx);
+			lst_pushLast(&s->_private_297228220_list, (void *) a);
 			return true;
 		}
 	#else

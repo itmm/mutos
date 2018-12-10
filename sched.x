@@ -15,36 +15,14 @@ D{file: sched.h}
 x{file: sched.h}
 ```
 
-# Action
-
 ```
 d{includes}
-	#include "lst.h"
+	#include "act.h"
 x{includes}
 ```
 
 ```
 d{structs}
-	struct Schedule;
-
-	typedef void (* act_Callback)(
-		struct Schedule *schedule,
-		void *context
-	);
-
-	struct Action {
-		struct lst_Node p{node};
-		act_Callback p{callback};
-		void *p{context};
-		#if CONFIG_WITH_MAGIC
-			unsigned p{magic};
-		#endif
-	};
-x{structs}
-```
-
-```
-a{structs}
 	struct Schedule {
 		struct lst_List p{list};
 		#if CONFIG_WITH_MAGIC
@@ -52,12 +30,12 @@ a{structs}
 		#endif
 	};
 
-	e{schedule functions}
+	e{functions}
 x{structs}
 ```
 
 ```
-d{schedule functions}
+d{functions}
 	#if CONFIG_WITH_MAGIC
 		#define sched_SCHEDULE(LST) { \
 			.p{list} = LST, \
@@ -68,18 +46,18 @@ d{schedule functions}
 			.p{list} = LST \
 		}
 	#endif
-x{schedule functions}
+x{functions}
 ```
 
 ```
-a{schedule functions}
+a{functions}
 	#define sched_EMPTY_SCHEDULE \
 		sched_SCHEDULE(lst_EMPTY_LIST)
-x{schedule functions}
+x{functions}
 ```
 
 ```
-a{schedule functions}
+a{functions}
 	bool sched_runNextAction(
 		struct Schedule *s
 	)
@@ -88,23 +66,23 @@ a{schedule functions}
 			if (! s) { return false; }
 			struct Action *a = (void *)
 				lst_pullFirst(&s->p{list});
-			if (! a) { return false; }
-			act_Callback cb = a->p{callback};
-			if (cb) {
-				cb(s, a->p{context});
-				return true;
+			bool done = false;
+			if (isAction(a)) {
+				if (invokeAction(s, a)) { 
+					done = true;
+				}
 			}
-			free(a);
-			return cb;
+			if (a) { free(a); }
+			return done;
 		}
 	#else
 		;
 	#endif
-x{schedule functions}
+x{functions}
 ```
 
 ```
-a{schedule functions}
+a{functions}
 	bool sched_push(
 		struct Schedule *s,
 		act_Callback cb,
@@ -117,13 +95,12 @@ a{schedule functions}
 				sizeof(struct Action)
 			);
 			if (! a) { return false; }
-			a->p{callback} = cb;
-			a->p{context} = ctx;
-			lst_pushLast(&s->p{list}, &a->p{node});
+			initAction(a, cb, ctx);
+			lst_pushLast(&s->p{list}, (void *) a);
 			return true;
 		}
 	#else
 		;
 	#endif
-x{schedule functions}
+x{functions}
 ```
