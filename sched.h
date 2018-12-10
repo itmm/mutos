@@ -40,7 +40,7 @@
 					done = true;
 				}
 			}
-			if (a) { free(a); }
+			freeAction(a);
 			return done;
 		}
 	#else
@@ -55,11 +55,8 @@
 	#if sched_IMPL
 		{
 			if (! s || ! cb) { return false; }
-			struct Action *a = malloc(
-				sizeof(struct Action)
-			);
+			struct Action *a = allocAction(cb, ctx);
 			if (! a) { return false; }
-			initAction(a, cb, ctx);
 			lst_pushLast(&s->_private_297228220_list, (void *) a);
 			return true;
 		}

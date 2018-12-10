@@ -65,21 +65,65 @@ x{functions}
 
 ```
 a{functions}
-	static inline
 	struct Action *initAction(
 		struct Action *a,
 		act_Callback cb,
 		void *ctx
-	) {
-		if (! a) { return NULL; }
-		if (! cb) { return NULL; }
-		a->p{callback} = cb;
-		a->p{context} = ctx;
-		#if CONFIG_WITH_MAGIC
-			a->p{magic} = m{action};
-		#endif
-		return a;
-	}
+	)
+	#if act_IMPL
+		{
+			if (! a) { return NULL; }
+			if (! cb) { return NULL; }
+			a->p{callback} = cb;
+			a->p{context} = ctx;
+			#if CONFIG_WITH_MAGIC
+				a->p{magic} = m{action};
+			#endif
+			return a;
+		}
+	#else
+		;
+	#endif
+x{functions}
+```
+
+```
+a{functions}
+	struct Action *allocAction(
+		act_Callback cb,
+		void *ctx
+	)
+	#if act_IMPL
+		{
+			struct Action *a = malloc(
+				sizeof(struct Action)
+			);
+			if (a) {
+				if (initAction(a, cb, ctx)) {
+					return a;
+				}
+				free(a);
+			}
+			return NULL;
+		}
+	#else
+		;
+	#endif
+x{functions}
+```
+
+```
+a{functions}
+	void freeAction(struct Action *a)
+	#if act_IMPL
+		{
+			if (isAction(a)) {
+				free(a);
+			}
+		}
+	#else
+		;
+	#endif
 x{functions}
 ```
 

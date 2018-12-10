@@ -35,21 +35,57 @@
 		return true;
 	}
 
-	static inline
 	struct Action *initAction(
 		struct Action *a,
 		act_Callback cb,
 		void *ctx
-	) {
-		if (! a) { return NULL; }
-		if (! cb) { return NULL; }
-		a->_private_482912951_callback = cb;
-		a->_private_1650282958_context = ctx;
-		#if CONFIG_WITH_MAGIC
-			a->_private_1001839987_magic = 1547135001;
-		#endif
-		return a;
-	}
+	)
+	#if act_IMPL
+		{
+			if (! a) { return NULL; }
+			if (! cb) { return NULL; }
+			a->_private_482912951_callback = cb;
+			a->_private_1650282958_context = ctx;
+			#if CONFIG_WITH_MAGIC
+				a->_private_1001839987_magic = 1547135001;
+			#endif
+			return a;
+		}
+	#else
+		;
+	#endif
+
+	struct Action *allocAction(
+		act_Callback cb,
+		void *ctx
+	)
+	#if act_IMPL
+		{
+			struct Action *a = malloc(
+				sizeof(struct Action)
+			);
+			if (a) {
+				if (initAction(a, cb, ctx)) {
+					return a;
+				}
+				free(a);
+			}
+			return NULL;
+		}
+	#else
+		;
+	#endif
+
+	void freeAction(struct Action *a)
+	#if act_IMPL
+		{
+			if (isAction(a)) {
+				free(a);
+			}
+		}
+	#else
+		;
+	#endif
 
 	bool invokeAction(
 		struct Schedule *s,

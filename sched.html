@@ -169,7 +169,7 @@
 
 <span class="in3"></span>}<br/>
 
-<span class="in3"></span><span class="keyword">if</span> (<span class="var">a</span>) { <span class="fn">free</span>(<span class="var">a</span>); }<br/>
+<span class="in3"></span><span class="fn">freeAction</span>(<span class="var">a</span>);<br/>
 
 <span class="in3"></span><span class="keyword">return</span> <span class="var">done</span>;<br/>
 
@@ -209,15 +209,9 @@
 
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">s</span> || ! <span class="var">cb</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 
-<span class="in3"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span> = <span class="fn">malloc</span>(<br/>
-
-<span class="in4"></span><span class="fn">sizeof</span>(<span class="type">struct</span> <span class="type">Action</span>)<br/>
-
-<span class="in3"></span>);<br/>
+<span class="in3"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span> = <span class="fn">allocAction</span>(<span class="var">cb</span>, <span class="var">ctx</span>);<br/>
 
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">a</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
-
-<span class="in3"></span><span class="fn">initAction</span>(<span class="var">a</span>, <span class="var">cb</span>, <span class="var">ctx</span>);<br/>
 
 <span class="in3"></span><span class="fn">lst_pushLast</span>(&amp;<span class="var">s</span>-&gt;<span class="type">@priv(<span>list</span>)</span>, (<span class="type">void</span> *) <span class="var">a</span>);<br/>
 
