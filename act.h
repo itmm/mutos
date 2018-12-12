@@ -17,7 +17,7 @@
 	);
 
 	struct Action {
-		struct lst_Node _private_1735900598_node;
+		struct Node _private_1735900598_node;
 		act_Callback _private_482912951_callback;
 		act_Free _private_1735552950_free;
 		#if CONFIG_WITH_MAGIC

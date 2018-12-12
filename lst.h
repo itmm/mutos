@@ -5,11 +5,9 @@
 
 	#include <stdbool.h>
 
-	#include <assert.h>
-
 	
-	struct lst_Node {
-		struct lst_Node *_private_662096437_link;
+	struct Node {
+		struct Node *_private_662096437_link;
 		#if CONFIG_WITH_MAGIC
 			unsigned _private_1001839981_magic;
 		#endif
@@ -29,8 +27,8 @@
 
 	#define lst_EMPTY_NODE lst_NODE(NULL)
 
-	static inline bool lst_isNode(
-		const struct lst_Node *node
+	static inline bool isNode(
+		const struct Node *node
 	) {
 		if (! node) { return false; }
 		#if CONFIG_WITH_MAGIC
@@ -43,34 +41,55 @@
 		return true;
 	}
 
-	static inline
-	struct lst_Node *lst_initNode(
-		struct lst_Node *node,
-		struct lst_Node *link
-	) {
-		assert(node);
-		if (link) { assert(lst_isNode(link)); }
-		node->_private_662096437_link = link;
-		return node;
-	}
+	struct Node *lst_initNode(
+		struct Node *node,
+		struct Node *link
+	)
+	#if lst_IMPL
+		{
+			if (! node) { return NULL; }
+			if (link && !isNode(link)) {
+				return NULL;
+			}
+			node->_private_662096437_link = link;
+			#if CONFIG_WITH_MAGIC
+				node->_private_1001839981_magic = 662158773;
+			#endif
+			return node;
+		}
+	#else
+		;
+	#endif
 
 	static inline
-	struct lst_Node *lst_initEmptyNode(
-		struct lst_Node *node
+	struct Node *lst_initEmptyNode(
+		struct Node *node
 	) {
 		return lst_initNode(node, NULL);
 	}
 
 
-	struct lst_List {
-		struct lst_Node *_private_1000324269_first;
-		struct lst_Node *_private_662075381_last;
+	struct List {
+		struct Node *_private_1000324269_first;
+		struct Node *_private_662075381_last;
 		#if CONFIG_WITH_MAGIC
 			unsigned _private_1001839981_magic;
 		#endif
 	};
 
 	
+	static inline bool isList(
+		const struct List *l
+	) {
+		if (! l) { return false; }
+		#if CONFIG_WITH_MAGIC
+			if (l->_private_1001839981_magic != 662108149) {
+				return false;
+			}
+		#endif
+		return true;
+	}
+
 	#if CONFIG_WITH_MAGIC
 		#define lst_LIST(FIRST, LAST) { \
 			._private_1000324269_first = (FIRST), \
@@ -86,30 +105,34 @@
 
 	#define lst_EMPTY_LIST lst_LIST(NULL, NULL)
 
-	struct lst_Node *lst_pullFirst(
-		struct lst_List *l
+	struct Node *lst_pullFirst(
+		struct List *l
 	)
 	#if lst_IMPL
 		{
-			if (! l) { return NULL; }
-			struct lst_Node *f = l->_private_1000324269_first;
-			if (f) {
-				struct lst_Node *n =
-					f->_private_662096437_link;
-				l->_private_1000324269_first = n;
-				if (! n) {
-					l->_private_662075381_last = NULL;
-				}
+			if (! isList(l)) { return NULL; }
+			struct Node *f = l->_private_1000324269_first;
+			if (isNode(f)) {
+				
+	struct Node *n = f->_private_662096437_link;
+	l->_private_1000324269_first = n;
+	if (! n) {
+		l->_private_662075381_last = NULL;
+	}
+	f->_private_662096437_link = NULL;
+;
+				return f;
+			} else {
+				return NULL;
 			}
-			return f;
 		}
 	#else
 		;
 	#endif
 
 	void lst_pushLast(
-		struct lst_List *l,
-		struct lst_Node *n
+		struct List *l,
+		struct Node *n
 	)
 	#if lst_IMPL
 		{

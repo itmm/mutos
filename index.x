@@ -1,19 +1,22 @@
 # μTOS
-* Ein neue Art von Betriebssystem
+* Ein neues Betriebssystem
 
 ```
 i{lst.x}
 ```
-* Listenbehandlung in eigener Datei
+* Listenbehandlung
 
 ```
 i{act.x}
 ```
+* Aktionen
 
 ```
 i{sched.x}
 ```
+* Scheduling
 
 ```
 i{main.x}
 ```
+* Test-Programm

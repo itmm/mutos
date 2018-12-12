@@ -25,7 +25,7 @@ x{includes}
 ```
 d{structs}
 	struct Schedule {
-		struct lst_List p{list};
+		struct List p{list};
 		struct Action *p{current};
 		#if CONFIG_WITH_MAGIC
 			unsigned p{magic};

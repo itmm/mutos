@@ -38,7 +38,7 @@ d{structs}
 	);
 
 	struct Action {
-		struct lst_Node p{node};
+		struct Node p{node};
 		act_Callback p{callback};
 		act_Free p{free};
 		#if CONFIG_WITH_MAGIC

@@ -6,7 +6,7 @@
 
 	
 	struct Schedule {
-		struct lst_List _private_297228220_list;
+		struct List _private_297228220_list;
 		struct Action *_private_1647241251_current;
 		#if CONFIG_WITH_MAGIC
 			unsigned _private_230416164_magic;

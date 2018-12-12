@@ -26,8 +26,10 @@
 </code>
 </div>
 
+<ul><li>
+ C-Datei inkludiert nur Header
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
@@ -44,8 +46,10 @@
 </code>
 </div>
 
+<ul><li>
+ Header enthält Includes und Strukturen
+</li></ul></div>
 
-</div>
 </div>
 <h1>Knoten</h1>
 <div class="slides">
@@ -53,16 +57,18 @@
 <h1>Knoten</h1>
 </div>
 
+<ul><li>
+ Knoten einer einfach verketteten Liste
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
 <span class="add">@def(<span class="name">structs</span>)</span><br/>
 
-<span class="in1"></span><span class="type">struct</span> <span class="var">lst_Node</span> {<br/>
+<span class="in1"></span><span class="type">struct</span> <span class="type">Node</span> {<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="type">@priv(<span>link</span>)</span>;<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="type">@priv(<span>link</span>)</span>;<br/>
 
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
@@ -81,8 +87,12 @@
 </code>
 </div>
 
+<ul><li>
+ Zeiger auch Nachfolger
+</li><li>
+ Und Magic-Feld
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
@@ -113,8 +123,10 @@
 </code>
 </div>
 
+<ul><li>
+ Nachfolger wird initialisiert
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
@@ -127,8 +139,10 @@
 </code>
 </div>
 
+<ul><li>
+ Definition von <code>NULL</code>
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
@@ -141,8 +155,10 @@
 </code>
 </div>
 
+<ul><li>
+ Leerer Knoten hat keinen Nachfolger
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
@@ -155,16 +171,18 @@
 </code>
 </div>
 
+<ul><li>
+ Definition von <code>bool</code>
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
 <span class="add">@add(<span class="name">node functions</span>)</span><br/>
 
-<span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span> <span class="type">bool</span> <span class="fn">lst_isNode</span>(<br/>
+<span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span> <span class="type">bool</span> <span class="fn">isNode</span>(<br/>
 
-<span class="in2"></span><span class="type">const</span> <span class="type">struct</span> <span class="var">lst_Node</span> *<span class="var">node</span><br/>
+<span class="in2"></span><span class="type">const</span> <span class="type">struct</span> <span class="type">Node</span> *<span class="var">node</span><br/>
 
 <span class="in1"></span>) {<br/>
 
@@ -193,54 +211,68 @@
 </code>
 </div>
 
+<ul><li>
+ <code>NULL</code> ist kein Knoten
+</li><li>
+ <code>magic</code> muss passen
+</li></ul></div>
 
-</div>
-<div><div>
-<code>
-
-<span class="add">@add(<span class="name">includes</span>)</span><br/>
-
-<span class="in1"></span>#<span class="var">include</span> &lt;<span class="var">assert</span>.<span class="var">h</span>&gt;<br/>
-
-<span class="end">@end(<span class="name">includes</span>)</span><br/>
-
-</code>
-</div>
-
-
-</div>
 <div><div>
 <code>
 
 <span class="add">@add(<span class="name">node functions</span>)</span><br/>
 
-<span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span><br/>
+<span class="in1"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="fn">lst_initNode</span>(<br/>
 
-<span class="in1"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="fn">lst_initNode</span>(<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="var">node</span>,<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="var">node</span>,<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="var">link</span><br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="var">link</span><br/>
+<span class="in1"></span>)<br/>
 
-<span class="in1"></span>) {<br/>
+<span class="in1"></span>#<span class="keyword">if</span> <span class="var">lst_IMPL</span><br/>
 
-<span class="in2"></span><span class="fn">assert</span>(<span class="var">node</span>);<br/>
+<span class="in2"></span>{<br/>
 
-<span class="in2"></span><span class="keyword">if</span> (<span class="var">link</span>) { <span class="fn">assert</span>(<span class="fn">lst_isNode</span>(<span class="var">link</span>)); }<br/>
+<span class="in3"></span><span class="keyword">if</span> (! <span class="var">node</span>) { <span class="keyword">return</span> <span class="num">NULL</span>; }<br/>
 
-<span class="in2"></span><span class="var">node</span>-&gt;<span class="type">@priv(<span>link</span>)</span> = <span class="var">link</span>;<br/>
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">link</span> &amp;&amp; !<span class="fn">isNode</span>(<span class="var">link</span>)) {<br/>
 
-<span class="in2"></span><span class="keyword">return</span> <span class="var">node</span>;<br/>
+<span class="in4"></span><span class="keyword">return</span> <span class="num">NULL</span>;<br/>
 
-<span class="in1"></span>}<br/>
+<span class="in3"></span>}<br/>
+
+<span class="in3"></span><span class="var">node</span>-&gt;<span class="type">@priv(<span>link</span>)</span> = <span class="var">link</span>;<br/>
+
+<span class="in3"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
+
+<span class="in4"></span><span class="var">node</span>-&gt;<span class="type">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>node</span>)</span>;<br/>
+
+<span class="in3"></span>#<span class="var">endif</span><br/>
+
+<span class="in3"></span><span class="keyword">return</span> <span class="var">node</span>;<br/>
+
+<span class="in2"></span>}<br/>
+
+<span class="in1"></span>#<span class="keyword">else</span><br/>
+
+<span class="in2"></span>;<br/>
+
+<span class="in1"></span>#<span class="var">endif</span><br/>
 
 <span class="end">@end(<span class="name">node functions</span>)</span><br/>
 
 </code>
 </div>
 
+<ul><li>
+ <code>node</code> darf nicht <code>NULL</code> sein
+</li><li>
+ <code>link</code> muss ein Knoten oder <code>NULL</code> sein
+</li><li>
+ <code>magic</code> wird initialisiert
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
@@ -248,9 +280,9 @@
 
 <span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span><br/>
 
-<span class="in1"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="fn">lst_initEmptyNode</span>(<br/>
+<span class="in1"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="fn">lst_initEmptyNode</span>(<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="var">node</span><br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="var">node</span><br/>
 
 <span class="in1"></span>) {<br/>
 
@@ -263,8 +295,10 @@
 </code>
 </div>
 
+<ul><li>
+ Kurzform
+</li></ul></div>
 
-</div>
 </div>
 <h1>Liste</h1>
 <div class="slides">
@@ -272,18 +306,24 @@
 <h1>Liste</h1>
 </div>
 
+<ul><li>
+ Einfach verkettete Liste
+</li><li>
+ Am Anfang und am Ende kann eingefügt werden
+</li><li>
+ Am Anfang kann entfernt werden
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
 <span class="add">@add(<span class="name">structs</span>)</span><br/>
 
-<span class="in1"></span><span class="type">struct</span> <span class="var">lst_List</span> {<br/>
+<span class="in1"></span><span class="type">struct</span> <span class="type">List</span> {<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="type">@priv(<span>first</span>)</span>;<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="type">@priv(<span>first</span>)</span>;<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="type">@priv(<span>last</span>)</span>;<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="type">@priv(<span>last</span>)</span>;<br/>
 
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
@@ -302,12 +342,50 @@
 </code>
 </div>
 
+<ul><li>
+ Zeiger auf erstes und letztes Element
+</li><li>
+ Und <code>magic</code> Feld
+</li></ul></div>
+
+<div><div>
+<code>
+
+<span class="add">@def(<span class="name">list functions</span>)</span><br/>
+
+<span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span> <span class="type">bool</span> <span class="fn">isList</span>(<br/>
+
+<span class="in2"></span><span class="type">const</span> <span class="type">struct</span> <span class="type">List</span> *<span class="var">l</span><br/>
+
+<span class="in1"></span>) {<br/>
+
+<span class="in2"></span><span class="keyword">if</span> (! <span class="var">l</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
+
+<span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
+
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">l</span>-&gt;<span class="type">@priv(<span>magic</span>)</span> != <span class="num">@magic(<span>list</span>)</span>) {<br/>
+
+<span class="in4"></span><span class="keyword">return</span> <span class="num">false</span>;<br/>
+
+<span class="in3"></span>}<br/>
+
+<span class="in2"></span>#<span class="var">endif</span><br/>
+
+<span class="in2"></span><span class="keyword">return</span> <span class="num">true</span>;<br/>
+
+<span class="in1"></span>}<br/>
+
+<span class="end">@end(<span class="name">list functions</span>)</span><br/>
+
+</code>
+</div>
+
 
 </div>
 <div><div>
 <code>
 
-<span class="add">@def(<span class="name">list functions</span>)</span><br/>
+<span class="add">@add(<span class="name">list functions</span>)</span><br/>
 
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
@@ -338,8 +416,10 @@
 </code>
 </div>
 
+<ul><li>
+ Initialisierung mit erstem und letztem Element
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
@@ -352,16 +432,18 @@
 </code>
 </div>
 
+<ul><li>
+ Kurzform
+</li></ul></div>
 
-</div>
 <div><div>
 <code>
 
 <span class="add">@add(<span class="name">list functions</span>)</span><br/>
 
-<span class="in1"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="fn">lst_pullFirst</span>(<br/>
+<span class="in1"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="fn">lst_pullFirst</span>(<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_List</span> *<span class="var">l</span><br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">List</span> *<span class="var">l</span><br/>
 
 <span class="in1"></span>)<br/>
 
@@ -369,27 +451,21 @@
 
 <span class="in2"></span>{<br/>
 
-<span class="in3"></span><span class="keyword">if</span> (! <span class="var">l</span>) { <span class="keyword">return</span> <span class="num">NULL</span>; }<br/>
+<span class="in3"></span><span class="keyword">if</span> (! <span class="fn">isList</span>(<span class="var">l</span>)) { <span class="keyword">return</span> <span class="num">NULL</span>; }<br/>
 
-<span class="in3"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="var">f</span> = <span class="var">l</span>-&gt;<span class="type">@priv(<span>first</span>)</span>;<br/>
+<span class="in3"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="var">f</span> = <span class="var">l</span>-&gt;<span class="type">@priv(<span>first</span>)</span>;<br/>
 
-<span class="in3"></span><span class="keyword">if</span> (<span class="var">f</span>) {<br/>
+<span class="in3"></span><span class="keyword">if</span> (<span class="fn">isNode</span>(<span class="var">f</span>)) {<br/>
 
-<span class="in4"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="var">n</span> =<br/>
+<span class="in4"></span><span class="expand">@expand(<span class="name">move head to next</span>)</span>;<br/>
 
-<span class="in5"></span><span class="var">f</span>-&gt;<span class="type">@priv(<span>link</span>)</span>;<br/>
+<span class="in4"></span><span class="keyword">return</span> <span class="var">f</span>;<br/>
 
-<span class="in4"></span><span class="var">l</span>-&gt;<span class="type">@priv(<span>first</span>)</span> = <span class="var">n</span>;<br/>
+<span class="in3"></span>} <span class="keyword">else</span> {<br/>
 
-<span class="in4"></span><span class="keyword">if</span> (! <span class="var">n</span>) {<br/>
-
-<span class="in5"></span><span class="var">l</span>-&gt;<span class="type">@priv(<span>last</span>)</span> = <span class="num">NULL</span>;<br/>
-
-<span class="in4"></span>}<br/>
+<span class="in4"></span><span class="keyword">return</span> <span class="num">NULL</span>;<br/>
 
 <span class="in3"></span>}<br/>
-
-<span class="in3"></span><span class="keyword">return</span> <span class="var">f</span>;<br/>
 
 <span class="in2"></span>}<br/>
 
@@ -404,8 +480,40 @@
 </code>
 </div>
 
+<ul><li>
+ Erstes Element aus Liste entfernen
+</li></ul></div>
 
+<div><div>
+<code>
+
+<span class="add">@def(<span class="name">move head to next</span>)</span><br/>
+
+<span class="in1"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="var">n</span> = <span class="var">f</span>-&gt;<span class="type">@priv(<span>link</span>)</span>;<br/>
+
+<span class="in1"></span><span class="var">l</span>-&gt;<span class="type">@priv(<span>first</span>)</span> = <span class="var">n</span>;<br/>
+
+<span class="in1"></span><span class="keyword">if</span> (! <span class="var">n</span>) {<br/>
+
+<span class="in2"></span><span class="var">l</span>-&gt;<span class="type">@priv(<span>last</span>)</span> = <span class="num">NULL</span>;<br/>
+
+<span class="in1"></span>}<br/>
+
+<span class="in1"></span><span class="var">f</span>-&gt;<span class="type">@priv(<span>link</span>)</span> = <span class="num">NULL</span>;<br/>
+
+<span class="end">@end(<span class="name">move head to next</span>)</span><br/>
+
+</code>
 </div>
+
+<ul><li>
+ Erstes Element der Liste wird aktualisiert
+</li><li>
+ Wenn Liste leer wird, dann muss letztes Element aktualisiert werden
+</li><li>
+ <code>link</code> wird zur Sicherheit auf <code>NULL</code> gesetzt
+</li></ul></div>
+
 <div><div>
 <code>
 
@@ -413,9 +521,9 @@
 
 <span class="in1"></span><span class="type">void</span> <span class="fn">lst_pushLast</span>(<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_List</span> *<span class="var">l</span>,<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">List</span> *<span class="var">l</span>,<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="var">lst_Node</span> *<span class="var">n</span><br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="var">n</span><br/>
 
 <span class="in1"></span>)<br/>
 
