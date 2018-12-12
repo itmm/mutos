@@ -5,22 +5,42 @@
 
 	
 	struct Schedule;
+	struct Action;
 
 	typedef void (* act_Callback)(
 		struct Schedule *schedule,
-		void *context
+		struct Action *action
+	);
+
+	typedef void (* act_Free)(
+		struct Action *action
 	);
 
 	struct Action {
 		struct lst_Node _private_1735900598_node;
 		act_Callback _private_482912951_callback;
-		void *_private_1650282958_context;
+		act_Free _private_1735552950_free;
 		#if CONFIG_WITH_MAGIC
 			unsigned _private_1001839987_magic;
 		#endif
 	};
 
 	
+	#if CONFIG_WITH_MAGIC
+		#define act_ACTION(CB, FREE) { \
+			._private_1735900598_node = lst_EMPTY_NODE, \
+			._private_482912951_callback = (CB), \
+			._private_1735552950_free = (FREE), \
+			._private_1001839987_magic = 1547135001 \
+		}
+	#else
+		#define act_ACTION(CB, FREE) { \
+			._private_1735900598_node = lst_EMPTY_NODE, \
+			._private_482912951_callback = (CB), \
+			._private_1735552950_free = (FREE) \
+		}
+	#endif
+
 	static inline bool isAction(
 		const struct Action *a
 	) {
@@ -38,50 +58,18 @@
 	struct Action *initAction(
 		struct Action *a,
 		act_Callback cb,
-		void *ctx
+		act_Free free
 	)
 	#if act_IMPL
 		{
 			if (! a) { return NULL; }
 			if (! cb) { return NULL; }
 			a->_private_482912951_callback = cb;
-			a->_private_1650282958_context = ctx;
+			a->_private_1735552950_free = free;
 			#if CONFIG_WITH_MAGIC
 				a->_private_1001839987_magic = 1547135001;
 			#endif
 			return a;
-		}
-	#else
-		;
-	#endif
-
-	struct Action *allocAction(
-		act_Callback cb,
-		void *ctx
-	)
-	#if act_IMPL
-		{
-			struct Action *a = malloc(
-				sizeof(struct Action)
-			);
-			if (a) {
-				if (initAction(a, cb, ctx)) {
-					return a;
-				}
-				free(a);
-			}
-			return NULL;
-		}
-	#else
-		;
-	#endif
-
-	void freeAction(struct Action *a)
-	#if act_IMPL
-		{
-			if (isAction(a)) {
-				free(a);
-			}
 		}
 	#else
 		;
@@ -97,8 +85,20 @@
 			if (! isAction(a)) { return false; }
 			act_Callback cb = a->_private_482912951_callback;
 			if (! cb) { return false; }
-			cb(s, a->_private_1650282958_context);
+			cb(s, a);
 			return true;
+		}
+	#else
+		;
+	#endif
+
+	void freeAction(struct Action *a)
+	#if act_IMPL
+		{
+			if (isAction(a)) {
+				act_Free f = a->_private_1735552950_free;
+				if (f) { f(a); }
+			}
 		}
 	#else
 		;

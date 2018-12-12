@@ -25,11 +25,27 @@
 
 <br/>
 
-<span class="in1"></span><span class="keyword">static</span> <span class="type">void</span> <span class="fn">writeCtx</span>(<span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">s</span>, <span class="type">void</span> *<span class="var">ctx</span>) {<br/>
+<span class="in1"></span><span class="type">struct</span> <span class="type">WriteCtx</span> {<br/>
 
-<span class="in2"></span><span class="fn">puts</span>(<span class="var">ctx</span>);<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> <span class="var">a</span>;<br/>
+
+<span class="in2"></span><span class="type">const</span> <span class="type">char</span> *<span class="var">str</span>;<br/>
+
+<span class="in1"></span>};<br/>
+
+<br/>
+
+<span class="in1"></span><span class="keyword">static</span> <span class="type">void</span> <span class="fn">writeCtx</span>(<span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">s</span>, <span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span>) {<br/>
+
+<span class="in2"></span><span class="type">struct</span> <span class="type">WriteCtx</span> *<span class="var">ctx</span> = (<span class="type">void</span> *) <span class="var">a</span>;<br/>
+
+<span class="in2"></span><span class="fn">puts</span>(<span class="var">ctx</span>-&gt;<span class="var">str</span>);<br/>
 
 <span class="in1"></span>}<br/>
+
+<br/>
+
+<span class="in1"></span>#<span class="var">define</span> <span class="fn">WRITE_CTX</span>(<span class="var">S</span>) { <span class="fn">act_ACTION</span>(<span class="var">writeCtx</span>, <span class="num">NULL</span>), (<span class="var">S</span>) }<br/>
 
 <br/>
 
@@ -37,9 +53,15 @@
 
 <span class="in2"></span><span class="type">struct</span> <span class="type">Schedule</span> <span class="var">sched</span> = <span class="var">sched_EMPTY_SCHEDULE</span>;<br/>
 
-<span class="in2"></span><span class="fn">assert</span>(<span class="fn">sched_push</span>(&amp;<span class="var">sched</span>, <span class="var">writeCtx</span>, <span class="str">"first"</span>));<br/>
+<span class="in2"></span><span class="fn">assert</span>(<span class="fn">isSchedule</span>(&amp;<span class="var">sched</span>));<br/>
 
-<span class="in2"></span><span class="fn">assert</span>(<span class="fn">sched_push</span>(&amp;<span class="var">sched</span>, <span class="var">writeCtx</span>, <span class="str">"second"</span>));<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">WriteCtx</span> <span class="var">first</span> = <span class="fn">WRITE_CTX</span>(<span class="str">"first"</span>);<br/>
+
+<span class="in2"></span><span class="type">struct</span> <span class="type">WriteCtx</span> <span class="var">second</span> = <span class="fn">WRITE_CTX</span>(<span class="str">"second"</span>);<br/>
+
+<span class="in2"></span><span class="fn">assert</span>(<span class="fn">sched_push</span>(&amp;<span class="var">sched</span>, &amp;<span class="var">first</span>.<span class="var">a</span>));<br/>
+
+<span class="in2"></span><span class="fn">assert</span>(<span class="fn">sched_push</span>(&amp;<span class="var">sched</span>, &amp;<span class="var">second</span>.<span class="var">a</span>));<br/>
 
 <span class="in2"></span><span class="keyword">while</span> (<span class="fn">sched_runNextAction</span>(&amp;<span class="var">sched</span>)) {}<br/>
 

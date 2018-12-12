@@ -53,6 +53,8 @@
 
 <span class="in1"></span>#<span class="var">include</span> <span class="str">"act.h"</span><br/>
 
+<span class="in1"></span>#<span class="var">include</span> &lt;<span class="var">stdbool</span>.<span class="var">h</span>&gt;<br/>
+
 <span class="end">@end(<span class="name">includes</span>)</span><br/>
 
 </code>
@@ -68,6 +70,8 @@
 <span class="in1"></span><span class="type">struct</span> <span class="type">Schedule</span> {<br/>
 
 <span class="in2"></span><span class="type">struct</span> <span class="var">lst_List</span> <span class="type">@priv(<span>list</span>)</span>;<br/>
+
+<span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="type">@priv(<span>current</span>)</span>;<br/>
 
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
@@ -93,13 +97,49 @@
 
 <span class="add">@def(<span class="name">functions</span>)</span><br/>
 
+<span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span> <span class="type">bool</span> <span class="fn">isSchedule</span>(<br/>
+
+<span class="in2"></span><span class="type">const</span> <span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">s</span><br/>
+
+<span class="in1"></span>) {<br/>
+
+<span class="in2"></span><span class="keyword">if</span> (! <span class="var">s</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
+
+<span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
+
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">s</span>-&gt;<span class="type">@priv(<span>magic</span>)</span> != <span class="num">@magic(<span>schedule</span>)</span>) {<br/>
+
+<span class="in4"></span><span class="keyword">return</span> <span class="num">false</span>;<br/>
+
+<span class="in3"></span>}<br/>
+
+<span class="in2"></span>#<span class="var">endif</span><br/>
+
+<span class="in2"></span><span class="keyword">return</span> <span class="num">true</span>;<br/>
+
+<span class="in1"></span>}<br/>
+
+<span class="end">@end(<span class="name">functions</span>)</span><br/>
+
+</code>
+</div>
+
+
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">functions</span>)</span><br/>
+
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">sched_SCHEDULE</span>(<span class="var">LST</span>) { \<br/>
 
 <span class="in3"></span>.<span class="type">@priv(<span>list</span>)</span> = <span class="var">LST</span>, \<br/>
 
-<span class="in3"></span>.<span class="type">@priv(<span>magic) = m{schedule</span>)</span> \<br/>
+<span class="in3"></span>.<span class="type">@priv(<span>current</span>)</span> = <span class="num">NULL</span>, \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>schedule</span>)</span> \<br/>
 
 <span class="in2"></span>}<br/>
 
@@ -107,7 +147,9 @@
 
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">sched_SCHEDULE</span>(<span class="var">LST</span>) { \<br/>
 
-<span class="in3"></span>.<span class="type">@priv(<span>list</span>)</span> = <span class="var">LST</span> \<br/>
+<span class="in3"></span>.<span class="type">@priv(<span>list</span>)</span> = <span class="var">LST</span>, \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>current</span>)</span> = <span class="num">NULL</span> \<br/>
 
 <span class="in2"></span>}<br/>
 
@@ -151,7 +193,7 @@
 
 <span class="in2"></span>{<br/>
 
-<span class="in3"></span><span class="keyword">if</span> (! <span class="var">s</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
+<span class="in3"></span><span class="keyword">if</span> (! <span class="fn">isSchedule</span>(<span class="var">s</span>)) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 
 <span class="in3"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span> = (<span class="type">void</span> *)<br/>
 
@@ -195,23 +237,17 @@
 
 <span class="in1"></span><span class="type">bool</span> <span class="fn">sched_push</span>(<br/>
 
-<span class="in2"></span><span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">s</span>,<br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">s</span>, <span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span><br/>
 
-<span class="in2"></span><span class="var">act_Callback</span> <span class="var">cb</span>,<br/>
-
-<span class="in2"></span><span class="type">void</span> *<span class="var">ctx</span><br/>
-
-<span class="in1"></span>) <br/>
+<span class="in1"></span>)<br/>
 
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">sched_IMPL</span><br/>
 
 <span class="in2"></span>{<br/>
 
-<span class="in3"></span><span class="keyword">if</span> (! <span class="var">s</span> || ! <span class="var">cb</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
+<span class="in3"></span><span class="keyword">if</span> (! <span class="fn">isSchedule</span>(<span class="var">s</span>)) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 
-<span class="in3"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span> = <span class="fn">allocAction</span>(<span class="var">cb</span>, <span class="var">ctx</span>);<br/>
-
-<span class="in3"></span><span class="keyword">if</span> (! <span class="var">a</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
+<span class="in3"></span><span class="keyword">if</span> (! <span class="fn">isAction</span>(<span class="var">a</span>)) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 
 <span class="in3"></span><span class="fn">lst_pushLast</span>(&amp;<span class="var">s</span>-&gt;<span class="type">@priv(<span>list</span>)</span>, (<span class="type">void</span> *) <span class="var">a</span>);<br/>
 
@@ -229,4 +265,5 @@
 
 </code>
 </div>
+
 

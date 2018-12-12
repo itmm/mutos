@@ -76,13 +76,23 @@
 
 <span class="in1"></span><span class="type">struct</span> <span class="type">Schedule</span>;<br/>
 
+<span class="in1"></span><span class="type">struct</span> <span class="type">Action</span>;<br/>
+
 <br/>
 
 <span class="in1"></span><span class="var">typedef</span> <span class="type">void</span> (* <span class="var">act_Callback</span>)(<br/>
 
 <span class="in2"></span><span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">schedule</span>,<br/>
 
-<span class="in2"></span><span class="type">void</span> *<span class="var">context</span><br/>
+<span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">action</span><br/>
+
+<span class="in1"></span>);<br/>
+
+<br/>
+
+<span class="in1"></span><span class="var">typedef</span> <span class="type">void</span> (* <span class="var">act_Free</span>)(<br/>
+
+<span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">action</span><br/>
 
 <span class="in1"></span>);<br/>
 
@@ -94,7 +104,7 @@
 
 <span class="in2"></span><span class="var">act_Callback</span> <span class="type">@priv(<span>callback</span>)</span>;<br/>
 
-<span class="in2"></span><span class="type">void</span> *<span class="type">@priv(<span>context</span>)</span>;<br/>
+<span class="in2"></span><span class="var">act_Free</span> <span class="type">@priv(<span>free</span>)</span>;<br/>
 
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
@@ -119,6 +129,46 @@
 <code>
 
 <span class="add">@def(<span class="name">functions</span>)</span><br/>
+
+<span class="in1"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
+
+<span class="in2"></span>#<span class="var">define</span> <span class="fn">act_ACTION</span>(<span class="var">CB</span>, <span class="var">FREE</span>) { \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>node</span>)</span> = <span class="var">lst_EMPTY_NODE</span>, \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>callback</span>)</span> = (<span class="var">CB</span>), \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>free</span>)</span> = (<span class="var">FREE</span>), \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>action</span>)</span> \<br/>
+
+<span class="in2"></span>}<br/>
+
+<span class="in1"></span>#<span class="keyword">else</span><br/>
+
+<span class="in2"></span>#<span class="var">define</span> <span class="fn">act_ACTION</span>(<span class="var">CB</span>, <span class="var">FREE</span>) { \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>node</span>)</span> = <span class="var">lst_EMPTY_NODE</span>, \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>callback</span>)</span> = (<span class="var">CB</span>), \<br/>
+
+<span class="in3"></span>.<span class="type">@priv(<span>free</span>)</span> = (<span class="var">FREE</span>) \<br/>
+
+<span class="in2"></span>}<br/>
+
+<span class="in1"></span>#<span class="var">endif</span><br/>
+
+<span class="end">@end(<span class="name">functions</span>)</span><br/>
+
+</code>
+</div>
+
+
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">functions</span>)</span><br/>
 
 <span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span> <span class="type">bool</span> <span class="fn">isAction</span>(<br/>
 
@@ -164,7 +214,7 @@
 
 <span class="in2"></span><span class="var">act_Callback</span> <span class="var">cb</span>,<br/>
 
-<span class="in2"></span><span class="type">void</span> *<span class="var">ctx</span><br/>
+<span class="in2"></span><span class="var">act_Free</span> <span class="var">free</span><br/>
 
 <span class="in1"></span>)<br/>
 
@@ -178,7 +228,7 @@
 
 <span class="in3"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>callback</span>)</span> = <span class="var">cb</span>;<br/>
 
-<span class="in3"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>context</span>)</span> = <span class="var">ctx</span>;<br/>
+<span class="in3"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>free</span>)</span> = <span class="var">free</span>;<br/>
 
 <span class="in3"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 
@@ -187,90 +237,6 @@
 <span class="in3"></span>#<span class="var">endif</span><br/>
 
 <span class="in3"></span><span class="keyword">return</span> <span class="var">a</span>;<br/>
-
-<span class="in2"></span>}<br/>
-
-<span class="in1"></span>#<span class="keyword">else</span><br/>
-
-<span class="in2"></span>;<br/>
-
-<span class="in1"></span>#<span class="var">endif</span><br/>
-
-<span class="end">@end(<span class="name">functions</span>)</span><br/>
-
-</code>
-</div>
-
-
-</div>
-<div><div>
-<code>
-
-<span class="add">@add(<span class="name">functions</span>)</span><br/>
-
-<span class="in1"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="fn">allocAction</span>(<br/>
-
-<span class="in2"></span><span class="var">act_Callback</span> <span class="var">cb</span>,<br/>
-
-<span class="in2"></span><span class="type">void</span> *<span class="var">ctx</span><br/>
-
-<span class="in1"></span>)<br/>
-
-<span class="in1"></span>#<span class="keyword">if</span> <span class="var">act_IMPL</span><br/>
-
-<span class="in2"></span>{<br/>
-
-<span class="in3"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span> = <span class="fn">malloc</span>(<br/>
-
-<span class="in4"></span><span class="fn">sizeof</span>(<span class="type">struct</span> <span class="type">Action</span>)<br/>
-
-<span class="in3"></span>);<br/>
-
-<span class="in3"></span><span class="keyword">if</span> (<span class="var">a</span>) {<br/>
-
-<span class="in4"></span><span class="keyword">if</span> (<span class="fn">initAction</span>(<span class="var">a</span>, <span class="var">cb</span>, <span class="var">ctx</span>)) {<br/>
-
-<span class="in5"></span><span class="keyword">return</span> <span class="var">a</span>;<br/>
-
-<span class="in4"></span>}<br/>
-
-<span class="in4"></span><span class="fn">free</span>(<span class="var">a</span>);<br/>
-
-<span class="in3"></span>}<br/>
-
-<span class="in3"></span><span class="keyword">return</span> <span class="num">NULL</span>;<br/>
-
-<span class="in2"></span>}<br/>
-
-<span class="in1"></span>#<span class="keyword">else</span><br/>
-
-<span class="in2"></span>;<br/>
-
-<span class="in1"></span>#<span class="var">endif</span><br/>
-
-<span class="end">@end(<span class="name">functions</span>)</span><br/>
-
-</code>
-</div>
-
-
-</div>
-<div><div>
-<code>
-
-<span class="add">@add(<span class="name">functions</span>)</span><br/>
-
-<span class="in1"></span><span class="type">void</span> <span class="fn">freeAction</span>(<span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span>)<br/>
-
-<span class="in1"></span>#<span class="keyword">if</span> <span class="var">act_IMPL</span><br/>
-
-<span class="in2"></span>{<br/>
-
-<span class="in3"></span><span class="keyword">if</span> (<span class="fn">isAction</span>(<span class="var">a</span>)) {<br/>
-
-<span class="in4"></span><span class="fn">free</span>(<span class="var">a</span>);<br/>
-
-<span class="in3"></span>}<br/>
 
 <span class="in2"></span>}<br/>
 
@@ -312,9 +278,43 @@
 
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">cb</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 
-<span class="in3"></span><span class="fn">cb</span>(<span class="var">s</span>, <span class="var">a</span>-&gt;<span class="type">@priv(<span>context</span>)</span>);<br/>
+<span class="in3"></span><span class="fn">cb</span>(<span class="var">s</span>, <span class="var">a</span>);<br/>
 
 <span class="in3"></span><span class="keyword">return</span> <span class="num">true</span>;<br/>
+
+<span class="in2"></span>}<br/>
+
+<span class="in1"></span>#<span class="keyword">else</span><br/>
+
+<span class="in2"></span>;<br/>
+
+<span class="in1"></span>#<span class="var">endif</span><br/>
+
+<span class="end">@end(<span class="name">functions</span>)</span><br/>
+
+</code>
+</div>
+
+
+</div>
+<div><div>
+<code>
+
+<span class="add">@add(<span class="name">functions</span>)</span><br/>
+
+<span class="in1"></span><span class="type">void</span> <span class="fn">freeAction</span>(<span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span>)<br/>
+
+<span class="in1"></span>#<span class="keyword">if</span> <span class="var">act_IMPL</span><br/>
+
+<span class="in2"></span>{<br/>
+
+<span class="in3"></span><span class="keyword">if</span> (<span class="fn">isAction</span>(<span class="var">a</span>)) {<br/>
+
+<span class="in4"></span><span class="var">act_Free</span> <span class="var">f</span> = <span class="var">a</span>-&gt;<span class="type">@priv(<span>free</span>)</span>;<br/>
+
+<span class="in4"></span><span class="keyword">if</span> (<span class="var">f</span>) { <span class="fn">f</span>(<span class="var">a</span>); }<br/>
+
+<span class="in3"></span>}<br/>
 
 <span class="in2"></span>}<br/>
 

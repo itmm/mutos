@@ -26,16 +26,21 @@ x{includes}
 ```
 d{structs}
 	struct Schedule;
+	struct Action;
 
 	typedef void (* act_Callback)(
 		struct Schedule *schedule,
-		void *context
+		struct Action *action
+	);
+
+	typedef void (* act_Free)(
+		struct Action *action
 	);
 
 	struct Action {
 		struct lst_Node p{node};
 		act_Callback p{callback};
-		void *p{context};
+		act_Free p{free};
 		#if CONFIG_WITH_MAGIC
 			unsigned p{magic};
 		#endif
@@ -47,6 +52,25 @@ x{structs}
 
 ```
 d{functions}
+	#if CONFIG_WITH_MAGIC
+		#define act_ACTION(CB, FREE) { \
+			.p{node} = lst_EMPTY_NODE, \
+			.p{callback} = (CB), \
+			.p{free} = (FREE), \
+			.p{magic} = m{action} \
+		}
+	#else
+		#define act_ACTION(CB, FREE) { \
+			.p{node} = lst_EMPTY_NODE, \
+			.p{callback} = (CB), \
+			.p{free} = (FREE) \
+		}
+	#endif
+x{functions}
+```
+
+```
+a{functions}
 	static inline bool isAction(
 		const struct Action *a
 	) {
@@ -68,58 +92,18 @@ a{functions}
 	struct Action *initAction(
 		struct Action *a,
 		act_Callback cb,
-		void *ctx
+		act_Free free
 	)
 	#if act_IMPL
 		{
 			if (! a) { return NULL; }
 			if (! cb) { return NULL; }
 			a->p{callback} = cb;
-			a->p{context} = ctx;
+			a->p{free} = free;
 			#if CONFIG_WITH_MAGIC
 				a->p{magic} = m{action};
 			#endif
 			return a;
-		}
-	#else
-		;
-	#endif
-x{functions}
-```
-
-```
-a{functions}
-	struct Action *allocAction(
-		act_Callback cb,
-		void *ctx
-	)
-	#if act_IMPL
-		{
-			struct Action *a = malloc(
-				sizeof(struct Action)
-			);
-			if (a) {
-				if (initAction(a, cb, ctx)) {
-					return a;
-				}
-				free(a);
-			}
-			return NULL;
-		}
-	#else
-		;
-	#endif
-x{functions}
-```
-
-```
-a{functions}
-	void freeAction(struct Action *a)
-	#if act_IMPL
-		{
-			if (isAction(a)) {
-				free(a);
-			}
 		}
 	#else
 		;
@@ -139,8 +123,24 @@ a{functions}
 			if (! isAction(a)) { return false; }
 			act_Callback cb = a->p{callback};
 			if (! cb) { return false; }
-			cb(s, a->p{context});
+			cb(s, a);
 			return true;
+		}
+	#else
+		;
+	#endif
+x{functions}
+```
+
+```
+a{functions}
+	void freeAction(struct Action *a)
+	#if act_IMPL
+		{
+			if (isAction(a)) {
+				act_Free f = a->p{free};
+				if (f) { f(a); }
+			}
 		}
 	#else
 		;

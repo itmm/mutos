@@ -1,6 +1,7 @@
 .PHONY: clean test
 
 CFLAGS += -Wall -std=c11
+CFLAGS += -DCONFIG_WITH_MAGIC
 
 Xs := $(wildcard *.x)
 SOURCEs := $(shell grep 'd{file: ' $(Xs) /dev/null | cut '-d{' -f2 | cut '-d}' -f1 | cut '-d ' -f2 |sort -u)
