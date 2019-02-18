@@ -1,50 +1,32 @@
 <!doctype html>
-<html lang="de"l>
+<html lang="de">
 <head>
 <meta charset="utf-8">
-<title>Actions</title><link rel="stylesheet" type="text/css" href="slides/slides.css"></head>
+<title>Actions</title>
+<link rel="stylesheet" type="text/css" href="slides/slides.css"></head>
 <body>
 <h1>Actions</h1>
 <div class="slides">
 <div><div>
 <h1>Actions</h1>
 </div>
-
-
 </div>
 <div><div>
 <code>
-
-<span class="add">@globdef(<span class="name">file: act.c</span>)</span><br/>
-
+<span class="macro">@globdef(<span class="name">file: act.c</span>)</span><br/>
 <span class="in1"></span>#<span class="var">define</span> <span class="var">act_IMPL</span> <span class="num">1</span><br/>
-
 <span class="in1"></span>#<span class="var">include</span> <span class="str">"act.h"</span><br/>
-
-<span class="end">@end(<span class="name">file: act.c</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="macro">@end(<span class="name">file: act.c</span>)</span><br/>
+</code></div>
 </div>
 <div><div>
 <code>
-
-<span class="add">@globdef(<span class="name">file: act.h</span>)</span><br/>
-
+<span class="macro">@globdef(<span class="name">file: act.h</span>)</span><br/>
 <span class="in1"></span>#<span class="var">pragma</span> <span class="var">once</span><br/>
-
-<span class="in1"></span><span class="expand">@expand(<span class="name">includes</span>)</span><br/>
-
-<span class="in1"></span><span class="expand">@expand(<span class="name">structs</span>)</span><br/>
-
-<span class="end">@end(<span class="name">file: act.h</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="in1"></span><span class="macro">@expand(<span class="name">includes</span>)</span><br/>
+<span class="in1"></span><span class="macro">@expand(<span class="name">structs</span>)</span><br/>
+<span class="macro">@end(<span class="name">file: act.h</span>)</span><br/>
+</code></div>
 </div>
 </div>
 <h1>Action</h1>
@@ -52,281 +34,144 @@
 <div><div>
 <h1>Action</h1>
 </div>
-
-
 </div>
 <div><div>
 <code>
-
-<span class="add">@def(<span class="name">includes</span>)</span><br/>
-
+<span class="macro">@def(<span class="name">includes</span>)</span><br/>
 <span class="in1"></span>#<span class="var">include</span> <span class="str">"lst.h"</span><br/>
-
-<span class="end">@end(<span class="name">includes</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="macro">@end(<span class="name">includes</span>)</span><br/>
+</code></div>
 </div>
 <div><div>
 <code>
-
-<span class="add">@def(<span class="name">structs</span>)</span><br/>
-
+<span class="macro">@def(<span class="name">structs</span>)</span><br/>
 <span class="in1"></span><span class="type">struct</span> <span class="type">Schedule</span>;<br/>
-
 <span class="in1"></span><span class="type">struct</span> <span class="type">Action</span>;<br/>
-
 <br/>
-
 <span class="in1"></span><span class="var">typedef</span> <span class="type">void</span> (* <span class="var">act_Callback</span>)(<br/>
-
 <span class="in2"></span><span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">schedule</span>,<br/>
-
 <span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">action</span><br/>
-
 <span class="in1"></span>);<br/>
-
 <br/>
-
 <span class="in1"></span><span class="var">typedef</span> <span class="type">void</span> (* <span class="var">act_Free</span>)(<br/>
-
 <span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">action</span><br/>
-
 <span class="in1"></span>);<br/>
-
 <br/>
-
 <span class="in1"></span><span class="type">struct</span> <span class="type">Action</span> {<br/>
-
-<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> <span class="type">@priv(<span>node</span>)</span>;<br/>
-
-<span class="in2"></span><span class="var">act_Callback</span> <span class="type">@priv(<span>callback</span>)</span>;<br/>
-
-<span class="in2"></span><span class="var">act_Free</span> <span class="type">@priv(<span>free</span>)</span>;<br/>
-
+<span class="in2"></span><span class="type">struct</span> <span class="type">Node</span> <span class="var">@priv(<span>node</span>)</span>;<br/>
+<span class="in2"></span><span class="var">act_Callback</span> <span class="var">@priv(<span>callback</span>)</span>;<br/>
+<span class="in2"></span><span class="var">act_Free</span> <span class="var">@priv(<span>free</span>)</span>;<br/>
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-
-<span class="in3"></span><span class="type">unsigned</span> <span class="type">@priv(<span>magic</span>)</span>;<br/>
-
+<span class="in3"></span><span class="type">unsigned</span> <span class="var">@priv(<span>magic</span>)</span>;<br/>
 <span class="in2"></span>#<span class="var">endif</span><br/>
-
 <span class="in1"></span>};<br/>
-
 <br/>
-
-<span class="in1"></span><span class="expand">@expand(<span class="name">functions</span>)</span><br/>
-
-<span class="end">@end(<span class="name">structs</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="in1"></span><span class="macro">@expand(<span class="name">functions</span>)</span><br/>
+<span class="macro">@end(<span class="name">structs</span>)</span><br/>
+</code></div>
 </div>
 <div><div>
 <code>
-
-<span class="add">@def(<span class="name">functions</span>)</span><br/>
-
+<span class="macro">@def(<span class="name">functions</span>)</span><br/>
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">act_ACTION</span>(<span class="var">CB</span>, <span class="var">FREE</span>) { \<br/>
-
-<span class="in3"></span>.<span class="type">@priv(<span>node</span>)</span> = <span class="var">lst_EMPTY_NODE</span>, \<br/>
-
-<span class="in3"></span>.<span class="type">@priv(<span>callback</span>)</span> = (<span class="var">CB</span>), \<br/>
-
-<span class="in3"></span>.<span class="type">@priv(<span>free</span>)</span> = (<span class="var">FREE</span>), \<br/>
-
-<span class="in3"></span>.<span class="type">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>action</span>)</span> \<br/>
-
+<span class="in3"></span>.<span class="var">@priv(<span>node</span>)</span> = <span class="var">lst_EMPTY_NODE</span>, \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>callback</span>)</span> = (<span class="var">CB</span>), \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>free</span>)</span> = (<span class="var">FREE</span>), \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>action</span>)</span> \<br/>
 <span class="in2"></span>}<br/>
-
 <span class="in1"></span>#<span class="keyword">else</span><br/>
-
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">act_ACTION</span>(<span class="var">CB</span>, <span class="var">FREE</span>) { \<br/>
-
-<span class="in3"></span>.<span class="type">@priv(<span>node</span>)</span> = <span class="var">lst_EMPTY_NODE</span>, \<br/>
-
-<span class="in3"></span>.<span class="type">@priv(<span>callback</span>)</span> = (<span class="var">CB</span>), \<br/>
-
-<span class="in3"></span>.<span class="type">@priv(<span>free</span>)</span> = (<span class="var">FREE</span>) \<br/>
-
+<span class="in3"></span>.<span class="var">@priv(<span>node</span>)</span> = <span class="var">lst_EMPTY_NODE</span>, \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>callback</span>)</span> = (<span class="var">CB</span>), \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>free</span>)</span> = (<span class="var">FREE</span>) \<br/>
 <span class="in2"></span>}<br/>
-
 <span class="in1"></span>#<span class="var">endif</span><br/>
-
-<span class="end">@end(<span class="name">functions</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="macro">@end(<span class="name">functions</span>)</span><br/>
+</code></div>
 </div>
 <div><div>
 <code>
-
-<span class="add">@add(<span class="name">functions</span>)</span><br/>
-
+<span class="macro">@add(<span class="name">functions</span>)</span><br/>
 <span class="in1"></span><span class="keyword">static</span> <span class="var">inline</span> <span class="type">bool</span> <span class="fn">isAction</span>(<br/>
-
 <span class="in2"></span><span class="type">const</span> <span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span><br/>
-
 <span class="in1"></span>) {<br/>
-
 <span class="in2"></span><span class="keyword">if</span> (! <span class="var">a</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
-
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-
-<span class="in3"></span><span class="keyword">if</span> (<span class="var">a</span>-&gt;<span class="type">@priv(<span>magic</span>)</span> !=<br/>
-
-<span class="in4"></span><span class="num">@magic(<span>action</span>)</span><br/>
-
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">a</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> !=<br/>
+<span class="in4"></span><span class="var">@magic(<span>action</span>)</span><br/>
 <span class="in3"></span>) {<br/>
-
 <span class="in4"></span><span class="keyword">return</span> <span class="num">false</span>;<br/>
-
 <span class="in3"></span>}<br/>
-
 <span class="in2"></span>#<span class="var">endif</span><br/>
-
 <span class="in2"></span><span class="keyword">return</span> <span class="num">true</span>;<br/>
-
 <span class="in1"></span>}<br/>
-
-<span class="end">@end(<span class="name">functions</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="macro">@end(<span class="name">functions</span>)</span><br/>
+</code></div>
 </div>
 <div><div>
 <code>
-
-<span class="add">@add(<span class="name">functions</span>)</span><br/>
-
+<span class="macro">@add(<span class="name">functions</span>)</span><br/>
 <span class="in1"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="fn">initAction</span>(<br/>
-
 <span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span>,<br/>
-
 <span class="in2"></span><span class="var">act_Callback</span> <span class="var">cb</span>,<br/>
-
 <span class="in2"></span><span class="var">act_Free</span> <span class="var">free</span><br/>
-
 <span class="in1"></span>)<br/>
-
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">act_IMPL</span><br/>
-
 <span class="in2"></span>{<br/>
-
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">a</span>) { <span class="keyword">return</span> <span class="num">NULL</span>; }<br/>
-
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">cb</span>) { <span class="keyword">return</span> <span class="num">NULL</span>; }<br/>
-
-<span class="in3"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>callback</span>)</span> = <span class="var">cb</span>;<br/>
-
-<span class="in3"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>free</span>)</span> = <span class="var">free</span>;<br/>
-
+<span class="in3"></span><span class="var">a</span>-&gt;<span class="var">@priv(<span>callback</span>)</span> = <span class="var">cb</span>;<br/>
+<span class="in3"></span><span class="var">a</span>-&gt;<span class="var">@priv(<span>free</span>)</span> = <span class="var">free</span>;<br/>
 <span class="in3"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-
-<span class="in4"></span><span class="var">a</span>-&gt;<span class="type">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>action</span>)</span>;<br/>
-
+<span class="in4"></span><span class="var">a</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>action</span>)</span>;<br/>
 <span class="in3"></span>#<span class="var">endif</span><br/>
-
 <span class="in3"></span><span class="keyword">return</span> <span class="var">a</span>;<br/>
-
 <span class="in2"></span>}<br/>
-
 <span class="in1"></span>#<span class="keyword">else</span><br/>
-
 <span class="in2"></span>;<br/>
-
 <span class="in1"></span>#<span class="var">endif</span><br/>
-
-<span class="end">@end(<span class="name">functions</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="macro">@end(<span class="name">functions</span>)</span><br/>
+</code></div>
 </div>
 <div><div>
 <code>
-
-<span class="add">@add(<span class="name">functions</span>)</span><br/>
-
+<span class="macro">@add(<span class="name">functions</span>)</span><br/>
 <span class="in1"></span><span class="type">bool</span> <span class="fn">invokeAction</span>(<br/>
-
 <span class="in2"></span><span class="type">struct</span> <span class="type">Schedule</span> *<span class="var">s</span>,<br/>
-
 <span class="in2"></span><span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span><br/>
-
 <span class="in1"></span>)<br/>
-
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">act_IMPL</span><br/>
-
 <span class="in2"></span>{<br/>
-
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">s</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
-
 <span class="in3"></span><span class="keyword">if</span> (! <span class="fn">isAction</span>(<span class="var">a</span>)) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
-
-<span class="in3"></span><span class="var">act_Callback</span> <span class="var">cb</span> = <span class="var">a</span>-&gt;<span class="type">@priv(<span>callback</span>)</span>;<br/>
-
+<span class="in3"></span><span class="var">act_Callback</span> <span class="var">cb</span> = <span class="var">a</span>-&gt;<span class="var">@priv(<span>callback</span>)</span>;<br/>
 <span class="in3"></span><span class="keyword">if</span> (! <span class="var">cb</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
-
 <span class="in3"></span><span class="fn">cb</span>(<span class="var">s</span>, <span class="var">a</span>);<br/>
-
 <span class="in3"></span><span class="keyword">return</span> <span class="num">true</span>;<br/>
-
 <span class="in2"></span>}<br/>
-
 <span class="in1"></span>#<span class="keyword">else</span><br/>
-
 <span class="in2"></span>;<br/>
-
 <span class="in1"></span>#<span class="var">endif</span><br/>
-
-<span class="end">@end(<span class="name">functions</span>)</span><br/>
-
-</code>
-</div>
-
-
+<span class="macro">@end(<span class="name">functions</span>)</span><br/>
+</code></div>
 </div>
 <div><div>
 <code>
-
-<span class="add">@add(<span class="name">functions</span>)</span><br/>
-
+<span class="macro">@add(<span class="name">functions</span>)</span><br/>
 <span class="in1"></span><span class="type">void</span> <span class="fn">freeAction</span>(<span class="type">struct</span> <span class="type">Action</span> *<span class="var">a</span>)<br/>
-
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">act_IMPL</span><br/>
-
 <span class="in2"></span>{<br/>
-
 <span class="in3"></span><span class="keyword">if</span> (<span class="fn">isAction</span>(<span class="var">a</span>)) {<br/>
-
-<span class="in4"></span><span class="var">act_Free</span> <span class="var">f</span> = <span class="var">a</span>-&gt;<span class="type">@priv(<span>free</span>)</span>;<br/>
-
+<span class="in4"></span><span class="var">act_Free</span> <span class="var">f</span> = <span class="var">a</span>-&gt;<span class="var">@priv(<span>free</span>)</span>;<br/>
 <span class="in4"></span><span class="keyword">if</span> (<span class="var">f</span>) { <span class="fn">f</span>(<span class="var">a</span>); }<br/>
-
 <span class="in3"></span>}<br/>
-
 <span class="in2"></span>}<br/>
-
 <span class="in1"></span>#<span class="keyword">else</span><br/>
-
 <span class="in2"></span>;<br/>
-
 <span class="in1"></span>#<span class="var">endif</span><br/>
-
-<span class="end">@end(<span class="name">functions</span>)</span><br/>
-
-</code>
+<span class="macro">@end(<span class="name">functions</span>)</span><br/>
+</code></div>
 </div>
-
-
+</body>
+</html>

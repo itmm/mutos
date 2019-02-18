@@ -6,10 +6,10 @@
 
 	
 	struct Schedule {
-		struct List _private_297228220_list;
-		struct Action *_private_1647241251_current;
+		struct List _private_1129700641_list;
+		struct Action *_private_388766463_current;
 		#if CONFIG_WITH_MAGIC
-			unsigned _private_230416164_magic;
+			unsigned _private_71151907_magic;
 		#endif
 	};
 
@@ -19,7 +19,7 @@
 	) {
 		if (! s) { return false; }
 		#if CONFIG_WITH_MAGIC
-			if (s->_private_230416164_magic != 74078299) {
+			if (s->_private_71151907_magic != 622131201) {
 				return false;
 			}
 		#endif
@@ -28,14 +28,14 @@
 
 	#if CONFIG_WITH_MAGIC
 		#define sched_SCHEDULE(LST) { \
-			._private_297228220_list = LST, \
-			._private_1647241251_current = NULL, \
-			._private_230416164_magic = 74078299 \
+			._private_1129700641_list = LST, \
+			._private_388766463_current = NULL, \
+			._private_71151907_magic = 622131201 \
 		}
 	#else
 		#define sched_SCHEDULE(LST) { \
-			._private_297228220_list = LST, \
-			._private_1647241251_current = NULL \
+			._private_1129700641_list = LST, \
+			._private_388766463_current = NULL \
 		}
 	#endif
 
@@ -49,7 +49,7 @@
 		{
 			if (! isSchedule(s)) { return false; }
 			struct Action *a = (void *)
-				lst_pullFirst(&s->_private_297228220_list);
+				lst_pullFirst(&s->_private_1129700641_list);
 			bool done = false;
 			if (isAction(a)) {
 				if (invokeAction(s, a)) { 
@@ -70,7 +70,7 @@
 		{
 			if (! isSchedule(s)) { return false; }
 			if (! isAction(a)) { return false; }
-			lst_pushLast(&s->_private_297228220_list, (void *) a);
+			lst_pushLast(&s->_private_1129700641_list, (void *) a);
 			return true;
 		}
 	#else
