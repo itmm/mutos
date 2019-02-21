@@ -13,7 +13,7 @@
 </div>
 <div><div>
 <code>
-<span class="macro">@globdef(<span class="name">file: sched.c</span>)</span><br/>
+<span class="macro">@Def(<span class="name">file: sched.c</span>)</span><br/>
 <span class="in1"></span>#<span class="var">define</span> <span class="var">sched_IMPL</span> <span class="num">1</span><br/>
 <span class="in1"></span>#<span class="var">include</span> <span class="str">"sched.h"</span><br/>
 <span class="macro">@end(<span class="name">file: sched.c</span>)</span><br/>
@@ -21,10 +21,10 @@
 </div>
 <div><div>
 <code>
-<span class="macro">@globdef(<span class="name">file: sched.h</span>)</span><br/>
+<span class="macro">@Def(<span class="name">file: sched.h</span>)</span><br/>
 <span class="in1"></span>#<span class="var">pragma</span> <span class="var">once</span><br/>
-<span class="in1"></span><span class="macro">@expand(<span class="name">includes</span>)</span><br/>
-<span class="in1"></span><span class="macro">@expand(<span class="name">structs</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">includes</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">structs</span>)</span><br/>
 <span class="macro">@end(<span class="name">file: sched.h</span>)</span><br/>
 </code></div>
 </div>
@@ -47,7 +47,7 @@
 <span class="in2"></span>#<span class="var">endif</span><br/>
 <span class="in1"></span>};<br/>
 <br/>
-<span class="in1"></span><span class="macro">@expand(<span class="name">functions</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">functions</span>)</span><br/>
 <span class="macro">@end(<span class="name">structs</span>)</span><br/>
 </code></div>
 </div>

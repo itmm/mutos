@@ -1,29 +1,29 @@
 # Scheduling of Actions
 
 ```
-D{file: sched.c}
+@Def(file: sched.c)
 	#define sched_IMPL 1
 	#include "sched.h"
-x{file: sched.c}
+@end(file: sched.c)
 ```
 
 ```
-D{file: sched.h}
+@Def(file: sched.h)
 	#pragma once
-	e{includes}
-	e{structs}
-x{file: sched.h}
+	@put(includes)
+	@put(structs)
+@end(file: sched.h)
 ```
 
 ```
-d{includes}
+@def(includes)
 	#include "act.h"
 	#include <stdbool.h>
-x{includes}
+@end(includes)
 ```
 
 ```
-d{structs}
+@def(structs)
 	struct Schedule {
 		struct List p{list};
 		struct Action *p{current};
@@ -32,12 +32,12 @@ d{structs}
 		#endif
 	};
 
-	e{functions}
-x{structs}
+	@put(functions)
+@end(structs)
 ```
 
 ```
-d{functions}
+@def(functions)
 	static inline bool isSchedule(
 		const struct Schedule *s
 	) {
@@ -49,11 +49,11 @@ d{functions}
 		#endif
 		return true;
 	}
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	#if CONFIG_WITH_MAGIC
 		#define sched_SCHEDULE(LST) { \
 			.p{list} = LST, \
@@ -66,18 +66,18 @@ a{functions}
 			.p{current} = NULL \
 		}
 	#endif
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	#define sched_EMPTY_SCHEDULE \
 		sched_SCHEDULE(lst_EMPTY_LIST)
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	bool sched_runNextAction(
 		struct Schedule *s
 	)
@@ -98,11 +98,11 @@ a{functions}
 	#else
 		;
 	#endif
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	bool sched_push(
 		struct Schedule *s, struct Action *a
 	)
@@ -116,6 +116,6 @@ a{functions}
 	#else
 		;
 	#endif
-x{functions}
+@end(functions)
 ```
 

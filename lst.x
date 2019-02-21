@@ -1,19 +1,19 @@
 # Listenbehandlung
 
 ```
-D{file: lst.c}
+@Def(file: lst.c)
 	#define lst_IMPL 1
 	#include "lst.h"
-x{file: lst.c}
+@end(file: lst.c)
 ```
 * C-Datei inkludiert nur Header
 
 ```
-D{file: lst.h}
+@Def(file: lst.h)
 	#pragma once
-	e{includes}
-	e{structs}
-x{file: lst.h}
+	@put(includes)
+	@put(structs)
+@end(file: lst.h)
 ```
 * Header enthält Includes und Strukturen
 
@@ -21,7 +21,7 @@ x{file: lst.h}
 * Knoten einer einfach verketteten Liste
 
 ```
-d{structs}
+@def(structs)
 	struct Node {
 		struct Node *p{link};
 		#if CONFIG_WITH_MAGIC
@@ -29,14 +29,14 @@ d{structs}
 		#endif
 	};
 
-	e{node functions}
-x{structs}
+	@put(node functions)
+@end(structs)
 ```
 * Zeiger auch Nachfolger
 * Und Magic-Feld
 
 ```
-d{node functions}
+@def(node functions)
 	#if CONFIG_WITH_MAGIC
 		#define lst_NODE(LINK) { \
 			.p{link} = (LINK), \
@@ -47,33 +47,33 @@ d{node functions}
 			.p{link} = (LINK) \
 		}
 	#endif
-x{node functions}
+@end(node functions)
 ```
 * Nachfolger wird initialisiert
 
 ```
-d{includes}
+@def(includes)
 	#include <stdlib.h>
-x{includes}
+@end(includes)
 ```
 * Definition von `NULL`
 
 ```
-a{node functions}
+@add(node functions)
 	#define lst_EMPTY_NODE lst_NODE(NULL)
-x{node functions}
+@end(node functions)
 ```
 * Leerer Knoten hat keinen Nachfolger
 
 ```
-a{includes}
+@add(includes)
 	#include <stdbool.h>
-x{includes}
+@end(includes)
 ```
 * Definition von `bool`
 
 ```
-a{node functions}
+@add(node functions)
 	static inline bool isNode(
 		const struct Node *node
 	) {
@@ -87,13 +87,13 @@ a{node functions}
 		#endif
 		return true;
 	}
-x{node functions}
+@end(node functions)
 ```
 * `NULL` ist kein Knoten
 * `magic` muss passen
 
 ```
-a{node functions}
+@add(node functions)
 	struct Node *lst_initNode(
 		struct Node *node,
 		struct Node *link
@@ -113,21 +113,21 @@ a{node functions}
 	#else
 		;
 	#endif
-x{node functions}
+@end(node functions)
 ```
 * `node` darf nicht `NULL` sein
 * `link` muss ein Knoten oder `NULL` sein
 * `magic` wird initialisiert
 
 ```
-a{node functions}
+@add(node functions)
 	static inline
 	struct Node *lst_initEmptyNode(
 		struct Node *node
 	) {
 		return lst_initNode(node, NULL);
 	}
-x{node functions}
+@end(node functions)
 ```
 * Kurzform
 
@@ -137,7 +137,7 @@ x{node functions}
 * Am Anfang kann entfernt werden
 
 ```
-a{structs}
+@add(structs)
 	struct List {
 		struct Node *p{first};
 		struct Node *p{last};
@@ -146,14 +146,14 @@ a{structs}
 		#endif
 	};
 
-	e{list functions}
-x{structs}
+	@put(list functions)
+@end(structs)
 ```
 * Zeiger auf erstes und letztes Element
 * Und `magic` Feld
 
 ```
-d{list functions}
+@def(list functions)
 	static inline bool isList(
 		const struct List *l
 	) {
@@ -165,11 +165,11 @@ d{list functions}
 		#endif
 		return true;
 	}
-x{list functions}
+@end(list functions)
 ```
 
 ```
-a{list functions}
+@add(list functions)
 	#if CONFIG_WITH_MAGIC
 		#define lst_LIST(FIRST, LAST) { \
 			.p{first} = (FIRST), \
@@ -182,19 +182,19 @@ a{list functions}
 			.p{last} = (LAST) \
 		}
 	#endif
-x{list functions}
+@end(list functions)
 ```
 * Initialisierung mit erstem und letztem Element
 
 ```
-a{list functions}
+@add(list functions)
 	#define lst_EMPTY_LIST lst_LIST(NULL, NULL)
-x{list functions}
+@end(list functions)
 ```
 * Kurzform
 
 ```
-a{list functions}
+@add(list functions)
 	struct Node *lst_pullFirst(
 		struct List *l
 	)
@@ -203,7 +203,7 @@ a{list functions}
 			if (! isList(l)) { return NULL; }
 			struct Node *f = l->p{first};
 			if (isNode(f)) {
-				e{move head to next};
+				@put(move head to next);
 				return f;
 			} else {
 				return NULL;
@@ -212,26 +212,26 @@ a{list functions}
 	#else
 		;
 	#endif
-x{list functions}
+@end(list functions)
 ```
 * Erstes Element aus Liste entfernen
 
 ```
-d{move head to next}
+@def(move head to next)
 	struct Node *n = f->p{link};
 	l->p{first} = n;
 	if (! n) {
 		l->p{last} = NULL;
 	}
 	f->p{link} = NULL;
-x{move head to next}
+@end(move head to next)
 ```
 * Erstes Element der Liste wird aktualisiert
 * Wenn Liste leer wird, dann muss letztes Element aktualisiert werden
 * `link` wird zur Sicherheit auf `NULL` gesetzt
 
 ```
-a{list functions}
+@add(list functions)
 	void lst_pushLast(
 		struct List *l,
 		struct Node *n
@@ -250,5 +250,5 @@ a{list functions}
 	#else
 		;
 	#endif
-x{list functions}
+@end(list functions)
 ```

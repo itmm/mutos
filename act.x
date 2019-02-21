@@ -1,30 +1,30 @@
 # Actions
 
 ```
-D{file: act.c}
+@Def(file: act.c)
 	#define act_IMPL 1
 	#include "act.h"
-x{file: act.c}
+@end(file: act.c)
 ```
 
 ```
-D{file: act.h}
+@Def(file: act.h)
 	#pragma once
-	e{includes}
-	e{structs}
-x{file: act.h}
+	@put(includes)
+	@put(structs)
+@end(file: act.h)
 ```
 
 # Action
 
 ```
-d{includes}
+@def(includes)
 	#include "lst.h"
-x{includes}
+@end(includes)
 ```
 
 ```
-d{structs}
+@def(structs)
 	struct Schedule;
 	struct Action;
 
@@ -46,12 +46,12 @@ d{structs}
 		#endif
 	};
 
-	e{functions}
-x{structs}
+	@put(functions)
+@end(structs)
 ```
 
 ```
-d{functions}
+@def(functions)
 	#if CONFIG_WITH_MAGIC
 		#define act_ACTION(CB, FREE) { \
 			.p{node} = lst_EMPTY_NODE, \
@@ -66,11 +66,11 @@ d{functions}
 			.p{free} = (FREE) \
 		}
 	#endif
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	static inline bool isAction(
 		const struct Action *a
 	) {
@@ -84,11 +84,11 @@ a{functions}
 		#endif
 		return true;
 	}
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	struct Action *initAction(
 		struct Action *a,
 		act_Callback cb,
@@ -108,11 +108,11 @@ a{functions}
 	#else
 		;
 	#endif
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	bool invokeAction(
 		struct Schedule *s,
 		struct Action *a
@@ -129,11 +129,11 @@ a{functions}
 	#else
 		;
 	#endif
-x{functions}
+@end(functions)
 ```
 
 ```
-a{functions}
+@add(functions)
 	void freeAction(struct Action *a)
 	#if act_IMPL
 		{
@@ -145,6 +145,6 @@ a{functions}
 	#else
 		;
 	#endif
-x{functions}
+@end(functions)
 ```
 

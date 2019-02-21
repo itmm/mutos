@@ -13,7 +13,7 @@
 </div>
 <div><div>
 <code>
-<span class="macro">@globdef(<span class="name">file: lst.c</span>)</span><br/>
+<span class="macro">@Def(<span class="name">file: lst.c</span>)</span><br/>
 <span class="in1"></span>#<span class="var">define</span> <span class="var">lst_IMPL</span> <span class="num">1</span><br/>
 <span class="in1"></span>#<span class="var">include</span> <span class="str">"lst.h"</span><br/>
 <span class="macro">@end(<span class="name">file: lst.c</span>)</span><br/>
@@ -24,10 +24,10 @@ C-Datei inkludiert nur Header
 </div>
 <div><div>
 <code>
-<span class="macro">@globdef(<span class="name">file: lst.h</span>)</span><br/>
+<span class="macro">@Def(<span class="name">file: lst.h</span>)</span><br/>
 <span class="in1"></span>#<span class="var">pragma</span> <span class="var">once</span><br/>
-<span class="in1"></span><span class="macro">@expand(<span class="name">includes</span>)</span><br/>
-<span class="in1"></span><span class="macro">@expand(<span class="name">structs</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">includes</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">structs</span>)</span><br/>
 <span class="macro">@end(<span class="name">file: lst.h</span>)</span><br/>
 </code></div>
 <ul><li>
@@ -54,7 +54,7 @@ Knoten einer einfach verketteten Liste
 <span class="in2"></span>#<span class="var">endif</span><br/>
 <span class="in1"></span>};<br/>
 <br/>
-<span class="in1"></span><span class="macro">@expand(<span class="name">node functions</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">node functions</span>)</span><br/>
 <span class="macro">@end(<span class="name">structs</span>)</span><br/>
 </code></div>
 <ul><li>
@@ -208,7 +208,7 @@ Am Anfang kann entfernt werden
 <span class="in2"></span>#<span class="var">endif</span><br/>
 <span class="in1"></span>};<br/>
 <br/>
-<span class="in1"></span><span class="macro">@expand(<span class="name">list functions</span>)</span><br/>
+<span class="in1"></span><span class="macro">@put(<span class="name">list functions</span>)</span><br/>
 <span class="macro">@end(<span class="name">structs</span>)</span><br/>
 </code></div>
 <ul><li>
@@ -276,7 +276,7 @@ Kurzform
 <span class="in3"></span><span class="keyword">if</span> (! <span class="fn">isList</span>(<span class="var">l</span>)) { <span class="keyword">return</span> <span class="num">NULL</span>; }<br/>
 <span class="in3"></span><span class="type">struct</span> <span class="type">Node</span> *<span class="var">f</span> = <span class="var">l</span>-&gt;<span class="var">@priv(<span>first</span>)</span>;<br/>
 <span class="in3"></span><span class="keyword">if</span> (<span class="fn">isNode</span>(<span class="var">f</span>)) {<br/>
-<span class="in4"></span><span class="macro">@expand(<span class="name">move head to next</span>)</span>;<br/>
+<span class="in4"></span><span class="macro">@put(<span class="name">move head to next</span>)</span>;<br/>
 <span class="in4"></span><span class="keyword">return</span> <span class="var">f</span>;<br/>
 <span class="in3"></span>} <span class="keyword">else</span> {<br/>
 <span class="in4"></span><span class="keyword">return</span> <span class="num">NULL</span>;<br/>

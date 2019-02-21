@@ -1,7 +1,7 @@
 # Main
 
 ```
-d{file: main.c}
+@def(file: main.c)
 	#include "sched.h"
 	#include <assert.h>
 	#include <stdio.h>
@@ -27,5 +27,5 @@ d{file: main.c}
 		assert(sched_push(&sched, &second.a));
 		while (sched_runNextAction(&sched)) {}
 	}
-x{file: main.c}
+@end(file: main.c)
 ```

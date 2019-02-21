@@ -2,21 +2,21 @@
 * Ein neues Betriebssystem
 
 ```
-i{lst.x}
+@inc(lst.x)
 ```
 * Listenbehandlung
 
 ```
-i{act.x}
+@inc(act.x)
 ```
 * Aktionen
 
 ```
-i{sched.x}
+@inc(sched.x)
 ```
 * Scheduling
 
 ```
-i{main.x}
+@inc(main.x)
 ```
 * Test-Programm
