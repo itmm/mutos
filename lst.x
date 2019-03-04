@@ -23,9 +23,9 @@
 ```
 @def(structs)
 	struct Node {
-		struct Node *p{link};
+		struct Node *@priv(link);
 		#if CONFIG_WITH_MAGIC
-			unsigned p{magic};
+			unsigned @priv(magic);
 		#endif
 	};
 
@@ -39,12 +39,12 @@
 @def(node functions)
 	#if CONFIG_WITH_MAGIC
 		#define lst_NODE(LINK) { \
-			.p{link} = (LINK), \
-			.p{magic} = m{node} \
+			.@priv(link) = (LINK), \
+			.@priv(magic) = @magic(node) \
 		}
 	#else
 		#define lst_NODE(LINK) { \
-			.p{link} = (LINK) \
+			.@priv(link) = (LINK) \
 		}
 	#endif
 @end(node functions)
@@ -79,8 +79,8 @@
 	) {
 		if (! node) { return false; }
 		#if CONFIG_WITH_MAGIC
-			if (node->p{magic} !=
-				m{node}
+			if (node->@priv(magic) !=
+				@magic(node)
 			) {
 				return false;
 			}
@@ -104,9 +104,9 @@
 			if (link && !isNode(link)) {
 				return NULL;
 			}
-			node->p{link} = link;
+			node->@priv(link) = link;
 			#if CONFIG_WITH_MAGIC
-				node->p{magic} = m{node};
+				node->@priv(magic) = @magic(node);
 			#endif
 			return node;
 		}
@@ -139,10 +139,10 @@
 ```
 @add(structs)
 	struct List {
-		struct Node *p{first};
-		struct Node *p{last};
+		struct Node *@priv(first);
+		struct Node *@priv(last);
 		#if CONFIG_WITH_MAGIC
-			unsigned p{magic};
+			unsigned @priv(magic);
 		#endif
 	};
 
@@ -159,7 +159,7 @@
 	) {
 		if (! l) { return false; }
 		#if CONFIG_WITH_MAGIC
-			if (l->p{magic} != m{list}) {
+			if (l->@priv(magic) != @magic(list)) {
 				return false;
 			}
 		#endif
@@ -172,14 +172,14 @@
 @add(list functions)
 	#if CONFIG_WITH_MAGIC
 		#define lst_LIST(FIRST, LAST) { \
-			.p{first} = (FIRST), \
-			.p{last} = (LAST), \
-			.p{magic} = m{list} \
+			.@priv(first) = (FIRST), \
+			.@priv(last) = (LAST), \
+			.@priv(magic) = @magic(list) \
 		}
 	#else
 		#define lst_LIST(FIRST, LAST) { \
-			.p{first} = (FIRST), \
-			.p{last} = (LAST) \
+			.@priv(first) = (FIRST), \
+			.@priv(last) = (LAST) \
 		}
 	#endif
 @end(list functions)
@@ -201,7 +201,7 @@
 	#if lst_IMPL
 		{
 			if (! isList(l)) { return NULL; }
-			struct Node *f = l->p{first};
+			struct Node *f = l->@priv(first);
 			if (isNode(f)) {
 				@put(move head to next);
 				return f;
@@ -218,12 +218,12 @@
 
 ```
 @def(move head to next)
-	struct Node *n = f->p{link};
-	l->p{first} = n;
+	struct Node *n = f->@priv(link);
+	l->@priv(first) = n;
 	if (! n) {
-		l->p{last} = NULL;
+		l->@priv(last) = NULL;
 	}
-	f->p{link} = NULL;
+	f->@priv(link) = NULL;
 @end(move head to next)
 ```
 * Erstes Element der Liste wird aktualisiert
@@ -239,13 +239,13 @@
 	#if lst_IMPL
 		{
 			if (! l || ! n) { return; }
-			n->p{link} = NULL;
-			if (l->p{first}) {
-				l->p{last}->p{link} = n;
+			n->@priv(link) = NULL;
+			if (l->@priv(first)) {
+				l->@priv(last)->@priv(link) = n;
 			} else {
-				l->p{first} = n;
+				l->@priv(first) = n;
 			}
-			l->p{last} = n;
+			l->@priv(last) = n;
 		}
 	#else
 		;

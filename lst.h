@@ -7,21 +7,21 @@
 
 	
 	struct Node {
-		struct Node *_private_1833293737_link;
+		struct Node *_private_1833293737_priv;
 		#if CONFIG_WITH_MAGIC
-			unsigned _private_609616670_magic;
+			unsigned _private_609616670_priv;
 		#endif
 	};
 
 	
 	#if CONFIG_WITH_MAGIC
 		#define lst_NODE(LINK) { \
-			._private_1833293737_link = (LINK), \
-			._private_609616670_magic = 1366676419 \
+			._private_1833293737_priv = (LINK), \
+			._private_609616670_priv = 1366676419 \
 		}
 	#else
 		#define lst_NODE(LINK) { \
-			._private_1833293737_link = (LINK) \
+			._private_1833293737_priv = (LINK) \
 		}
 	#endif
 
@@ -32,7 +32,7 @@
 	) {
 		if (! node) { return false; }
 		#if CONFIG_WITH_MAGIC
-			if (node->_private_609616670_magic !=
+			if (node->_private_609616670_priv !=
 				1366676419
 			) {
 				return false;
@@ -51,9 +51,9 @@
 			if (link && !isNode(link)) {
 				return NULL;
 			}
-			node->_private_1833293737_link = link;
+			node->_private_1833293737_priv = link;
 			#if CONFIG_WITH_MAGIC
-				node->_private_609616670_magic = 1366676419;
+				node->_private_609616670_priv = 1366676419;
 			#endif
 			return node;
 		}
@@ -70,10 +70,10 @@
 
 
 	struct List {
-		struct Node *_private_1309463449_first;
-		struct Node *_private_1287679325_last;
+		struct Node *_private_1309463449_priv;
+		struct Node *_private_1287679325_priv;
 		#if CONFIG_WITH_MAGIC
-			unsigned _private_609616670_magic;
+			unsigned _private_609616670_priv;
 		#endif
 	};
 
@@ -83,7 +83,7 @@
 	) {
 		if (! l) { return false; }
 		#if CONFIG_WITH_MAGIC
-			if (l->_private_609616670_magic != 614343215) {
+			if (l->_private_609616670_priv != 614343215) {
 				return false;
 			}
 		#endif
@@ -92,14 +92,14 @@
 
 	#if CONFIG_WITH_MAGIC
 		#define lst_LIST(FIRST, LAST) { \
-			._private_1309463449_first = (FIRST), \
-			._private_1287679325_last = (LAST), \
-			._private_609616670_magic = 614343215 \
+			._private_1309463449_priv = (FIRST), \
+			._private_1287679325_priv = (LAST), \
+			._private_609616670_priv = 614343215 \
 		}
 	#else
 		#define lst_LIST(FIRST, LAST) { \
-			._private_1309463449_first = (FIRST), \
-			._private_1287679325_last = (LAST) \
+			._private_1309463449_priv = (FIRST), \
+			._private_1287679325_priv = (LAST) \
 		}
 	#endif
 
@@ -111,15 +111,15 @@
 	#if lst_IMPL
 		{
 			if (! isList(l)) { return NULL; }
-			struct Node *f = l->_private_1309463449_first;
+			struct Node *f = l->_private_1309463449_priv;
 			if (isNode(f)) {
 				
-	struct Node *n = f->_private_1833293737_link;
-	l->_private_1309463449_first = n;
+	struct Node *n = f->_private_1833293737_priv;
+	l->_private_1309463449_priv = n;
 	if (! n) {
-		l->_private_1287679325_last = NULL;
+		l->_private_1287679325_priv = NULL;
 	}
-	f->_private_1833293737_link = NULL;
+	f->_private_1833293737_priv = NULL;
 ;
 				return f;
 			} else {
@@ -137,13 +137,13 @@
 	#if lst_IMPL
 		{
 			if (! l || ! n) { return; }
-			n->_private_1833293737_link = NULL;
-			if (l->_private_1309463449_first) {
-				l->_private_1287679325_last->_private_1833293737_link = n;
+			n->_private_1833293737_priv = NULL;
+			if (l->_private_1309463449_priv) {
+				l->_private_1287679325_priv->_private_1833293737_priv = n;
 			} else {
-				l->_private_1309463449_first = n;
+				l->_private_1309463449_priv = n;
 			}
-			l->_private_1287679325_last = n;
+			l->_private_1287679325_priv = n;
 		}
 	#else
 		;

@@ -38,11 +38,11 @@
 	);
 
 	struct Action {
-		struct Node p{node};
-		act_Callback p{callback};
-		act_Free p{free};
+		struct Node @priv(node);
+		act_Callback @priv(callback);
+		act_Free @priv(free);
 		#if CONFIG_WITH_MAGIC
-			unsigned p{magic};
+			unsigned @priv(magic);
 		#endif
 	};
 
@@ -54,16 +54,16 @@
 @def(functions)
 	#if CONFIG_WITH_MAGIC
 		#define act_ACTION(CB, FREE) { \
-			.p{node} = lst_EMPTY_NODE, \
-			.p{callback} = (CB), \
-			.p{free} = (FREE), \
-			.p{magic} = m{action} \
+			.@priv(node) = lst_EMPTY_NODE, \
+			.@priv(callback) = (CB), \
+			.@priv(free) = (FREE), \
+			.@priv(magic) = @magic(action) \
 		}
 	#else
 		#define act_ACTION(CB, FREE) { \
-			.p{node} = lst_EMPTY_NODE, \
-			.p{callback} = (CB), \
-			.p{free} = (FREE) \
+			.@priv(node) = lst_EMPTY_NODE, \
+			.@priv(callback) = (CB), \
+			.@priv(free) = (FREE) \
 		}
 	#endif
 @end(functions)
@@ -76,8 +76,8 @@
 	) {
 		if (! a) { return false; }
 		#if CONFIG_WITH_MAGIC
-			if (a->p{magic} !=
-				m{action}
+			if (a->@priv(magic) !=
+				@magic(action)
 			) {
 				return false;
 			}
@@ -98,10 +98,10 @@
 		{
 			if (! a) { return NULL; }
 			if (! cb) { return NULL; }
-			a->p{callback} = cb;
-			a->p{free} = free;
+			a->@priv(callback) = cb;
+			a->@priv(free) = free;
 			#if CONFIG_WITH_MAGIC
-				a->p{magic} = m{action};
+				a->@priv(magic) = @magic(action);
 			#endif
 			return a;
 		}
@@ -121,7 +121,7 @@
 		{
 			if (! s) { return false; }
 			if (! isAction(a)) { return false; }
-			act_Callback cb = a->p{callback};
+			act_Callback cb = a->@priv(callback);
 			if (! cb) { return false; }
 			cb(s, a);
 			return true;
@@ -138,7 +138,7 @@
 	#if act_IMPL
 		{
 			if (isAction(a)) {
-				act_Free f = a->p{free};
+				act_Free f = a->@priv(free);
 				if (f) { f(a); }
 			}
 		}

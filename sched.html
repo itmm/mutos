@@ -59,7 +59,7 @@
 <span class="in1"></span>) {<br/>
 <span class="in2"></span><span class="keyword">if</span> (! <span class="var">s</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-<span class="in3"></span><span class="keyword">if</span> (<span class="var">s</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> != <span class="var">@magic(<span>schedule</span>)</span>) {<br/>
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">s</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> != <span class="num">@magic(<span>schedule</span>)</span>) {<br/>
 <span class="in4"></span><span class="keyword">return</span> <span class="num">false</span>;<br/>
 <span class="in3"></span>}<br/>
 <span class="in2"></span>#<span class="var">endif</span><br/>
@@ -75,7 +75,7 @@
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">sched_SCHEDULE</span>(<span class="var">LST</span>) { \<br/>
 <span class="in3"></span>.<span class="var">@priv(<span>list</span>)</span> = <span class="var">LST</span>, \<br/>
 <span class="in3"></span>.<span class="var">@priv(<span>current</span>)</span> = <span class="num">NULL</span>, \<br/>
-<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>schedule</span>)</span> \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>schedule</span>)</span> \<br/>
 <span class="in2"></span>}<br/>
 <span class="in1"></span>#<span class="keyword">else</span><br/>
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">sched_SCHEDULE</span>(<span class="var">LST</span>) { \<br/>

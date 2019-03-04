@@ -78,7 +78,7 @@
 <span class="in3"></span>.<span class="var">@priv(<span>node</span>)</span> = <span class="var">lst_EMPTY_NODE</span>, \<br/>
 <span class="in3"></span>.<span class="var">@priv(<span>callback</span>)</span> = (<span class="var">CB</span>), \<br/>
 <span class="in3"></span>.<span class="var">@priv(<span>free</span>)</span> = (<span class="var">FREE</span>), \<br/>
-<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>action</span>)</span> \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>action</span>)</span> \<br/>
 <span class="in2"></span>}<br/>
 <span class="in1"></span>#<span class="keyword">else</span><br/>
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">act_ACTION</span>(<span class="var">CB</span>, <span class="var">FREE</span>) { \<br/>
@@ -99,7 +99,7 @@
 <span class="in2"></span><span class="keyword">if</span> (! <span class="var">a</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 <span class="in3"></span><span class="keyword">if</span> (<span class="var">a</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> !=<br/>
-<span class="in4"></span><span class="var">@magic(<span>action</span>)</span><br/>
+<span class="in4"></span><span class="num">@magic(<span>action</span>)</span><br/>
 <span class="in3"></span>) {<br/>
 <span class="in4"></span><span class="keyword">return</span> <span class="num">false</span>;<br/>
 <span class="in3"></span>}<br/>
@@ -124,7 +124,7 @@
 <span class="in3"></span><span class="var">a</span>-&gt;<span class="var">@priv(<span>callback</span>)</span> = <span class="var">cb</span>;<br/>
 <span class="in3"></span><span class="var">a</span>-&gt;<span class="var">@priv(<span>free</span>)</span> = <span class="var">free</span>;<br/>
 <span class="in3"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-<span class="in4"></span><span class="var">a</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>action</span>)</span>;<br/>
+<span class="in4"></span><span class="var">a</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>action</span>)</span>;<br/>
 <span class="in3"></span>#<span class="var">endif</span><br/>
 <span class="in3"></span><span class="keyword">return</span> <span class="var">a</span>;<br/>
 <span class="in2"></span>}<br/>

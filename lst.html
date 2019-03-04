@@ -69,7 +69,7 @@ Und Magic-Feld
 <span class="in1"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">lst_NODE</span>(<span class="var">LINK</span>) { \<br/>
 <span class="in3"></span>.<span class="var">@priv(<span>link</span>)</span> = (<span class="var">LINK</span>), \<br/>
-<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>node</span>)</span> \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>node</span>)</span> \<br/>
 <span class="in2"></span>}<br/>
 <span class="in1"></span>#<span class="keyword">else</span><br/>
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">lst_NODE</span>(<span class="var">LINK</span>) { \<br/>
@@ -121,7 +121,7 @@ Definition von <code><span class="type">bool</span></code>
 <span class="in2"></span><span class="keyword">if</span> (! <span class="var">node</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
 <span class="in3"></span><span class="keyword">if</span> (<span class="var">node</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> !=<br/>
-<span class="in4"></span><span class="var">@magic(<span>node</span>)</span><br/>
+<span class="in4"></span><span class="num">@magic(<span>node</span>)</span><br/>
 <span class="in3"></span>) {<br/>
 <span class="in4"></span><span class="keyword">return</span> <span class="num">false</span>;<br/>
 <span class="in3"></span>}<br/>
@@ -151,7 +151,7 @@ Definition von <code><span class="type">bool</span></code>
 <span class="in3"></span>}<br/>
 <span class="in3"></span><span class="var">node</span>-&gt;<span class="var">@priv(<span>link</span>)</span> = <span class="var">link</span>;<br/>
 <span class="in3"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-<span class="in4"></span><span class="var">node</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>node</span>)</span>;<br/>
+<span class="in4"></span><span class="var">node</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>node</span>)</span>;<br/>
 <span class="in3"></span>#<span class="var">endif</span><br/>
 <span class="in3"></span><span class="keyword">return</span> <span class="var">node</span>;<br/>
 <span class="in2"></span>}<br/>
@@ -225,7 +225,7 @@ Und <code><span class="var">magic</span></code> Feld
 <span class="in1"></span>) {<br/>
 <span class="in2"></span><span class="keyword">if</span> (! <span class="var">l</span>) { <span class="keyword">return</span> <span class="num">false</span>; }<br/>
 <span class="in2"></span>#<span class="keyword">if</span> <span class="var">CONFIG_WITH_MAGIC</span><br/>
-<span class="in3"></span><span class="keyword">if</span> (<span class="var">l</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> != <span class="var">@magic(<span>list</span>)</span>) {<br/>
+<span class="in3"></span><span class="keyword">if</span> (<span class="var">l</span>-&gt;<span class="var">@priv(<span>magic</span>)</span> != <span class="num">@magic(<span>list</span>)</span>) {<br/>
 <span class="in4"></span><span class="keyword">return</span> <span class="num">false</span>;<br/>
 <span class="in3"></span>}<br/>
 <span class="in2"></span>#<span class="var">endif</span><br/>
@@ -241,7 +241,7 @@ Und <code><span class="var">magic</span></code> Feld
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">lst_LIST</span>(<span class="var">FIRST</span>, <span class="var">LAST</span>) { \<br/>
 <span class="in3"></span>.<span class="var">@priv(<span>first</span>)</span> = (<span class="var">FIRST</span>), \<br/>
 <span class="in3"></span>.<span class="var">@priv(<span>last</span>)</span> = (<span class="var">LAST</span>), \<br/>
-<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="var">@magic(<span>list</span>)</span> \<br/>
+<span class="in3"></span>.<span class="var">@priv(<span>magic</span>)</span> = <span class="num">@magic(<span>list</span>)</span> \<br/>
 <span class="in2"></span>}<br/>
 <span class="in1"></span>#<span class="keyword">else</span><br/>
 <span class="in2"></span>#<span class="var">define</span> <span class="fn">lst_LIST</span>(<span class="var">FIRST</span>, <span class="var">LAST</span>) { \<br/>

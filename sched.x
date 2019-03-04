@@ -25,10 +25,10 @@
 ```
 @def(structs)
 	struct Schedule {
-		struct List p{list};
-		struct Action *p{current};
+		struct List @priv(list);
+		struct Action *@priv(current);
 		#if CONFIG_WITH_MAGIC
-			unsigned p{magic};
+			unsigned @priv(magic);
 		#endif
 	};
 
@@ -43,7 +43,7 @@
 	) {
 		if (! s) { return false; }
 		#if CONFIG_WITH_MAGIC
-			if (s->p{magic} != m{schedule}) {
+			if (s->@priv(magic) != @magic(schedule)) {
 				return false;
 			}
 		#endif
@@ -56,14 +56,14 @@
 @add(functions)
 	#if CONFIG_WITH_MAGIC
 		#define sched_SCHEDULE(LST) { \
-			.p{list} = LST, \
-			.p{current} = NULL, \
-			.p{magic} = m{schedule} \
+			.@priv(list) = LST, \
+			.@priv(current) = NULL, \
+			.@priv(magic) = @magic(schedule) \
 		}
 	#else
 		#define sched_SCHEDULE(LST) { \
-			.p{list} = LST, \
-			.p{current} = NULL \
+			.@priv(list) = LST, \
+			.@priv(current) = NULL \
 		}
 	#endif
 @end(functions)
@@ -85,7 +85,7 @@
 		{
 			if (! isSchedule(s)) { return false; }
 			struct Action *a = (void *)
-				lst_pullFirst(&s->p{list});
+				lst_pullFirst(&s->@priv(list));
 			bool done = false;
 			if (isAction(a)) {
 				if (invokeAction(s, a)) { 
@@ -110,7 +110,7 @@
 		{
 			if (! isSchedule(s)) { return false; }
 			if (! isAction(a)) { return false; }
-			lst_pushLast(&s->p{list}, (void *) a);
+			lst_pushLast(&s->@priv(list), (void *) a);
 			return true;
 		}
 	#else
